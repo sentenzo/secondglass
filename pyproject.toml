@@ -1,0 +1,36 @@
+[tool.black]
+line-length = 79
+
+[tool.isort]
+line_length = 79
+known_local_folder = []
+
+[tool.mypy]
+python_version = "3.11"
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.poetry]
+name = "secondglass"
+version = "0.0.1"
+description = "..."
+authors = ["sentenzo"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.1.1"
+pytest = "^8.0.0"
+isort = "^5.13.2"
+flake8 = "^7.0.0"
+mypy = "^1.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+markers = ["slow: marks test as slow (deselect with '-m \"not slow\"')"]
