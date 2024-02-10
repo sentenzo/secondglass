@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any, Tuple, Type
 
 import pytest
 
@@ -73,12 +73,13 @@ def test_from_smh_exception(test_input: Any, exception_type: Type) -> None:
 @pytest.mark.parametrize(
     "test_input,expected",
     [
-        ("42", 42_000),
+        ("42", 2520000),
         ("1h 2m 3s", 3723000),
         ("1h2m3s", 3723000),
         ("3 sec 2m1h", 3723000),
         ("1 hour 2 minutes", 3720000),
         ("0 hour 62 minutes", 3720000),
+        ("51h", 183600000),
     ],
 )
 def test_from_text(test_input: str, expected: int) -> None:
@@ -99,3 +100,21 @@ def test_from_text(test_input: str, expected: int) -> None:
 def test_from_text_exception(test_input: str, exception_type: Type) -> None:
     with pytest.raises(exception_type):
         Milliseconds.from_text(test_input)
+
+
+@pytest.mark.parametrize(
+    "test_input,expected_tuple,expected_text",
+    [
+        ("42", (0, 42, 0), "42 minutes 0 seconds"),
+        ("1h 2m 3s", (1, 2, 3), "1 hour 2 minutes 3 seconds"),
+        ("3h 1m 1s", (3, 1, 1), "3 hours 1 minute 1 second"),
+        ("121s", (0, 2, 1), "2 minutes 1 second"),
+        ("51h", (51, 0, 0), "51 hours 0 minutes 0 seconds"),
+    ],
+)
+def test_to_text(
+    test_input: str, expected_tuple: Tuple[int, int, int], expected_text: str
+) -> None:
+    val = Milliseconds.from_text(test_input)
+    assert val.to_time_units_tuple() == expected_tuple
+    assert val.to_text() == expected_text
