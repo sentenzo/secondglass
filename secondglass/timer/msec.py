@@ -20,6 +20,9 @@ class Milliseconds(int):
     def __add__(self, __value: int) -> "Milliseconds":
         return Milliseconds(super().__add__(__value))
 
+    def __sub__(self, __value: int) -> "Milliseconds":
+        return Milliseconds(super().__sub__(__value))
+
     @staticmethod
     def from_seconds(seconds: int) -> "Milliseconds":
         return Milliseconds(seconds * MSEC_IN_SEC)
@@ -47,25 +50,23 @@ class Milliseconds(int):
             group = "".join(g).strip()
             if group:
                 groups.append(group)
-        if groups:
-            if len(groups) == 1:
-                group = groups[0]
-                if group.isnumeric():
-                    seconds = int(group)
-                    return Milliseconds.from_seconds(seconds)
-            elif len(groups) % 2 == 0:
-                numbers: list[int] = []
-                for group in groups[::2]:
-                    if not group.isnumeric():
-                        raise TimeParseException(
-                            f"Failed to parse text: {text}"
-                        )
-                    numbers.append(int(group))
-                units: list[TimeUnit] = []
-                for group in groups[1::2]:
-                    units.append(TimeUnit.parse(group))
-                msec: Milliseconds = Milliseconds(0)
-                for number, unit in zip(numbers, units):
-                    msec += Milliseconds.from_time_unit(number, unit)
-                return msec
+        if not groups:
+            raise TimeParseException(f"Failed to parse text: {text}")
+
+        if len(groups) == 1 and group[0].isnumeric():
+            group = groups[0]
+            seconds = int(group)
+            return Milliseconds.from_seconds(seconds)
+        elif len(groups) % 2 == 0:
+            numbers: list[int] = []
+            for group in groups[::2]:
+                if not group.isnumeric():
+                    raise TimeParseException(f"Failed to parse text: {text}")
+                numbers.append(int(group))
+            units: list[TimeUnit] = []
+
+            msec: Milliseconds = Milliseconds(0)
+            for number, unit in zip(numbers, units):
+                msec += Milliseconds.from_time_unit(number, unit)
+            return msec
         raise TimeParseException(f"Failed to parse text: {text}")

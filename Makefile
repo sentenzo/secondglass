@@ -11,7 +11,7 @@ init:
 lint:
 	poetry run isort ${CODE}
 	poetry run black ${CODE}
-	poetry run flake8 ${CODE} --count --select=E9,F63,F7,F82 --show-source --statistics
+	poetry run flake8 ${CODE} --count --show-source --statistics
 	poetry run mypy ${CODE}
 
 test:
