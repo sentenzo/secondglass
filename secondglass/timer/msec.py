@@ -1,5 +1,6 @@
 from itertools import groupby
-from typing import Any
+from math import ceil
+from typing import Any, Tuple
 
 from .exceptions import TimeParseException
 from .timeunit import TimeUnit
@@ -56,7 +57,7 @@ class Milliseconds(int):
         if len(groups) == 1 and group[0].isnumeric():
             group = groups[0]
             seconds = int(group)
-            return Milliseconds.from_seconds(seconds)
+            return Milliseconds.from_minutes(seconds)
         elif len(groups) % 2 == 0:
             numbers: list[int] = []
             for group in groups[::2]:
@@ -64,9 +65,33 @@ class Milliseconds(int):
                     raise TimeParseException(f"Failed to parse text: {text}")
                 numbers.append(int(group))
             units: list[TimeUnit] = []
-
+            for group in groups[1::2]:
+                units.append(TimeUnit.parse(group))
             msec: Milliseconds = Milliseconds(0)
             for number, unit in zip(numbers, units):
                 msec += Milliseconds.from_time_unit(number, unit)
             return msec
         raise TimeParseException(f"Failed to parse text: {text}")
+
+    def to_time_units_tuple(self) -> Tuple[int, int, int]:
+        total_s = ceil(self / MSEC_IN_SEC)
+        total_m, s = divmod(total_s, SEC_IN_MIN)
+        total_h, m = divmod(total_m, MIN_IN_H)
+        return (total_h, m, s)
+
+    def to_text(self) -> str:
+        words: list[str] = []
+        for number, name in zip(
+            self.to_time_units_tuple(), ("hour", "minute", "second")
+        ):
+            if number == 0 and len(words) == 0:
+                continue
+            words.append(str(number))
+            if number == 1:
+                words.append(name)
+            else:
+                words.append(name + "s")
+        if not words:
+            return "0"
+        else:
+            return " ".join(words)
