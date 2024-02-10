@@ -17,6 +17,21 @@ def test_new(test_input: int, expected: int) -> None:
     assert Milliseconds(test_input) == expected
 
 
+def test_add_sub() -> None:
+    a = Milliseconds(10)
+    b = Milliseconds(30)
+    assert isinstance(a + b, Milliseconds)
+    b += a
+    assert isinstance(b, Milliseconds)
+    b -= a
+    assert isinstance(b, Milliseconds)
+    assert isinstance(b - a, Milliseconds)
+    with pytest.raises(ValueError):
+        _ = a - b
+    with pytest.raises(ValueError):
+        a -= b
+
+
 @pytest.mark.parametrize(
     "test_input,expected",
     [(0, 0), (12, 12_000), (102938, 102938_000)],
