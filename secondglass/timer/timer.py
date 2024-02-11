@@ -1,6 +1,7 @@
 from enum import Enum, auto
+from functools import wraps
 from time import time
-from typing import Any
+from typing import Any, Callable
 
 from .exceptions import TimerInvalidAction, TimerValueError
 from .msec import MSEC_IN_SEC, Milliseconds
@@ -13,6 +14,36 @@ class Status(Enum):
     TICKING = auto()
     PAUSED = auto()
     RANG = auto()
+
+
+def _requires_state(*allowed_statuses: Status) -> Callable:
+
+    def requires_state_decorator(method: Callable) -> Callable:
+        @wraps(method)
+        def wrapper(self: "Timer", *args, **kwargs):  # type: ignore
+            if self._status not in allowed_statuses:
+                raise TimerInvalidAction(
+                    f"Invalid status: {self._status}.\n"
+                    f"Method {method.__name__} requires one of these statuses:"
+                    f" {allowed_statuses}"
+                )
+            return method(self, *args, **kwargs)
+
+        return wrapper
+
+    return requires_state_decorator
+
+
+def _reset_all(method: Callable) -> Callable:
+    @wraps(method)
+    def wrapper(self: "Timer", *args, **kwargs):  # type: ignore
+        result = method(self, *args, **kwargs)
+        self.duration_left = self.init_duration
+        self.last_tick_time = None
+        self.time_since_rang = None
+        return result
+
+    return wrapper
 
 
 class Timer:
@@ -54,50 +85,32 @@ class Timer:
                 f"Attempt to init duration as {type(duration).__name__}"
             )
 
+    @_requires_state(Status.IDLE)
+    @_reset_all
     def start(self, new_duration: Any | None = None) -> None:
-        if self._status != Status.IDLE:
-            raise TimerInvalidAction("Attempt to start() without Status.IDLE")
         if new_duration:
             self._set_duration(new_duration)
-        self.duration_left = self.init_duration
         self._status = Status.TICKING
 
+    @_requires_state(Status.TICKING, Status.PAUSED, Status.RANG)
+    @_reset_all
     def stop(self) -> None:
-        if self._status not in (Status.TICKING, Status.PAUSED, Status.RANG):
-            raise TimerInvalidAction(
-                "Attempt to stop() without Status.TICKING or Status.PAUSED"
-            )
-        self.duration_left = self.init_duration
-        self.last_tick_time = None
-        self.time_since_rang = None
         self._status = Status.IDLE
 
+    @_requires_state(Status.TICKING, Status.PAUSED, Status.RANG)
+    @_reset_all
     def restart(self, new_duration: Any | None = None) -> None:
-        if self._status not in (Status.TICKING, Status.PAUSED, Status.RANG):
-            raise TimerInvalidAction(
-                "Attempt to restart() without Status.TICKING or Status.PAUSED "
-                "or Status.RANG"
-            )
         if new_duration:
             self._set_duration(new_duration)
-        self.duration_left = self.init_duration
-        self.last_tick_time = None
-        self.time_since_rang = None
         self._status = Status.TICKING
 
+    @_requires_state(Status.TICKING)
     def pause(self) -> None:
-        if self._status != Status.TICKING:
-            raise TimerInvalidAction(
-                "Attempt to pause() without Status.TICKING"
-            )
         self.last_tick_time = None
         self._status = Status.PAUSED
 
+    @_requires_state(Status.PAUSED)
     def resume(self) -> None:
-        if self._status != Status.PAUSED:
-            raise TimerInvalidAction(
-                "Attempt to resume() without Status.PAUSED"
-            )
         self._status = Status.TICKING
 
     def _ring(self) -> None:
