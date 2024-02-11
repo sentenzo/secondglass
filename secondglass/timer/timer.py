@@ -25,7 +25,7 @@ class Timer:
 
     @property
     def status(self) -> Status:
-        return self.status
+        return self._status
 
     @property
     def init_duration_text(self) -> str:
@@ -53,17 +53,17 @@ class Timer:
             raise TimerValueError(
                 f"Attempt to init duration as {type(duration).__name__}"
             )
-        self.duration_left = self.init_duration
 
     def start(self, new_duration: Any | None = None) -> None:
         if self._status != Status.IDLE:
             raise TimerInvalidAction("Attempt to start() without Status.IDLE")
         if new_duration:
             self._set_duration(new_duration)
+        self.duration_left = self.init_duration
         self._status = Status.TICKING
 
     def stop(self) -> None:
-        if self._status not in (Status.TICKING, Status.PAUSED):
+        if self._status not in (Status.TICKING, Status.PAUSED, Status.RANG):
             raise TimerInvalidAction(
                 "Attempt to stop() without Status.TICKING or Status.PAUSED"
             )
@@ -72,12 +72,14 @@ class Timer:
         self.time_since_rang = None
         self._status = Status.IDLE
 
-    def restart(self) -> None:
+    def restart(self, new_duration: Any | None = None) -> None:
         if self._status not in (Status.TICKING, Status.PAUSED, Status.RANG):
             raise TimerInvalidAction(
                 "Attempt to restart() without Status.TICKING or Status.PAUSED "
                 "or Status.RANG"
             )
+        if new_duration:
+            self._set_duration(new_duration)
         self.duration_left = self.init_duration
         self.last_tick_time = None
         self.time_since_rang = None
@@ -104,7 +106,8 @@ class Timer:
     def tick(self) -> None:
         now: Milliseconds = Milliseconds(time() * MSEC_IN_SEC)
         if self.last_tick_time is None:
-            self.last_tick_time = now
+            if self.status in (Status.TICKING, Status.RANG):
+                self.last_tick_time = now
             return
         time_passed: Milliseconds = now - self.last_tick_time
         if self.status == Status.TICKING:
@@ -121,3 +124,5 @@ class Timer:
                     "Attempt to tick() when self.time_since_rang is None"
                 )
             self.time_since_rang += time_passed
+        if self.status in (Status.TICKING, Status.RANG):
+            self.last_tick_time = now
