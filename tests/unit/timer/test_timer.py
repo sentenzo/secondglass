@@ -129,3 +129,72 @@ def test_ticking_transitions() -> None:
     assert timer.init_duration == timer.duration_left
     assert timer.last_tick_time is None
     assert timer.status == Status.IDLE
+
+
+def test_paused_transitions() -> None:
+    # init
+    small_duration = Milliseconds(100)  # 0.1 sec
+
+    def new_paused_timer(check_assert: bool = False) -> Timer:
+        timer = Timer()
+        timer.start(small_duration)
+        timer.tick()
+        sleep(0.01)
+        timer.tick()
+        if check_assert:
+            assert timer.status == Status.TICKING
+            assert timer.init_duration > timer.duration_left
+            assert timer.last_tick_time is not None
+        timer.pause()
+        if check_assert:
+            assert timer.status == Status.PAUSED
+            assert timer.init_duration > timer.duration_left
+            assert timer.last_tick_time is None
+        return timer
+
+    timer = new_paused_timer(True)  # check init
+
+    # invalid actions check
+    for action in (timer.start, timer.pause):
+        with pytest.raises(TimerInvalidAction):
+            action()  # type: ignore
+
+    # tick action
+    timer.tick()
+    sleep(0.01)
+    timer.tick()
+    assert timer.last_tick_time is None
+    assert timer.status == Status.PAUSED
+
+    # resume action
+    old_duration_left = timer.duration_left
+    timer.tick()
+    sleep(0.01)
+    timer.tick()
+    assert timer.duration_left == old_duration_left
+    timer.resume()
+    assert timer.status == Status.TICKING
+    assert timer.duration_left == old_duration_left
+    assert timer.last_tick_time is None
+    timer.tick()
+    sleep(0.01)
+    timer.tick()
+    assert timer.last_tick_time is not None
+    assert timer.duration_left < old_duration_left
+
+    # restart action
+    timer = new_paused_timer()
+    assert timer.init_duration > timer.duration_left
+    timer.restart()
+    assert timer.status == Status.TICKING
+    assert timer.init_duration == timer.duration_left
+    assert timer.last_tick_time is None
+
+    # stop action
+    timer = new_paused_timer()
+    assert timer.init_duration > timer.duration_left
+    timer.stop()
+    assert timer.status == Status.IDLE
+    assert timer.init_duration == timer.duration_left
+    assert timer.last_tick_time is None
+    assert timer.time_since_rang is None
