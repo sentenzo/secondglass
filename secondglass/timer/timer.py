@@ -3,7 +3,7 @@ from functools import wraps
 from time import time
 from typing import Any, Callable
 
-from .exceptions import TimerInvalidAction, TimerValueError
+from .exceptions import TimerInvalidAction, TimerValueError, TimerException
 from .msec import MSEC_IN_SEC, Milliseconds
 
 DEFAULT_DURATION = Milliseconds.from_minutes(5)
@@ -75,6 +75,21 @@ class Timer:
             )
         return self.time_since_rang.to_text()
 
+    @property
+    def progress(self) -> float:
+        if self._status == Status.RANG:
+            return 1.0
+        elif self._status in (Status.TICKING, Status.PAUSED):
+            value = (
+                self.init_duration - self.duration_left
+            ) / self.init_duration
+            assert 0.0 <= value <= 1.0
+            return value
+        elif self._status == Status.IDLE:
+            return 0.0
+        else:
+            raise TimerException(f"Unknown status: {self._status}")
+
     def _set_duration(self, duration: str | Milliseconds) -> None:
         if isinstance(duration, str):
             self.init_duration = Milliseconds.from_text(duration)
@@ -116,6 +131,7 @@ class Timer:
     def _ring(self) -> None:
         print("RING!")
 
+    @_requires_state(Status.IDLE, Status.TICKING, Status.PAUSED, Status.RANG)
     def tick(self) -> None:
         now: Milliseconds = Milliseconds(time() * MSEC_IN_SEC)
         if self.last_tick_time is None:
@@ -133,7 +149,7 @@ class Timer:
                 self.duration_left -= time_passed
         elif self.status == Status.RANG:
             if self.time_since_rang is None:
-                raise TimerInvalidAction(
+                raise TimerValueError(
                     "Attempt to tick() when self.time_since_rang is None"
                 )
             self.time_since_rang += time_passed
