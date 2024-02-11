@@ -22,11 +22,11 @@ def test_set_duration() -> None:
     new_duration_text = "1m 23s"
     new_duration = Milliseconds.from_text(new_duration_text)
     timer._set_duration(new_duration)
-    assert timer.init_duration == timer.duration_left == new_duration
+    assert timer.init_duration == new_duration
     timer._set_duration(DEFAULT_DURATION)
-    assert timer.init_duration == timer.duration_left == DEFAULT_DURATION
+    assert timer.init_duration == DEFAULT_DURATION
     timer._set_duration(new_duration_text)
-    assert timer.init_duration == timer.duration_left == new_duration
+    assert timer.init_duration == new_duration
     with pytest.raises(TimerValueError):
         timer._set_duration(1.23)  # type: ignore
 
@@ -42,7 +42,7 @@ def test_idle_transitions() -> None:
     # invalid actions check
     for action in (timer.stop, timer.restart, timer.pause, timer.resume):
         with pytest.raises(TimerInvalidAction):
-            action()
+            action()  # type: ignore
 
     # passive tick check
     timer.tick()
@@ -76,8 +76,10 @@ def test_ticking_transitions() -> None:
     # tick action
     assert timer.init_duration == timer.duration_left
     timer.tick()
+    old_last_tick_time = timer.last_tick_time
     sleep(0.01)
     timer.tick()
+    assert timer.last_tick_time > old_last_tick_time  # type: ignore
     assert timer.init_duration > timer.duration_left
     assert timer.status == Status.TICKING
     assert timer.time_since_rang is None
@@ -193,6 +195,64 @@ def test_paused_transitions() -> None:
     # stop action
     timer = new_paused_timer()
     assert timer.init_duration > timer.duration_left
+    timer.stop()
+    assert timer.status == Status.IDLE
+    assert timer.init_duration == timer.duration_left
+    assert timer.last_tick_time is None
+    assert timer.time_since_rang is None
+
+
+def test_rang_transitions() -> None:
+    # init
+    small_duration = Milliseconds(100)  # 0.1 sec
+
+    def new_rang_timer(check_assert: bool = False) -> Timer:
+        timer = Timer()
+        timer.start(small_duration)
+        timer.tick()
+        sleep(0.01)
+        timer.tick()
+        if check_assert:
+            assert timer.status == Status.TICKING
+            assert timer.init_duration > timer.duration_left
+            assert timer.last_tick_time is not None
+            assert timer.time_since_rang is None
+        sleep(small_duration / MSEC_IN_SEC)
+        timer.tick()
+        if check_assert:
+            assert timer.status == Status.RANG
+            assert timer.duration_left == Milliseconds(0)
+            assert timer.last_tick_time is not None
+            assert timer.time_since_rang is not None
+        return timer
+
+    timer = new_rang_timer(True)  # check init
+
+    # invalid actions check
+    for action in (timer.start, timer.pause, timer.resume):
+        with pytest.raises(TimerInvalidAction):
+            action()  # type: ignore
+
+    # tick action
+    old_last_tick_time = timer.last_tick_time
+    old_time_since_rang = timer.time_since_rang
+    timer.tick()
+    sleep(0.01)
+    timer.tick()
+    assert timer.last_tick_time > old_last_tick_time  # type: ignore
+    assert timer.time_since_rang > old_time_since_rang  # type: ignore
+    assert timer.duration_left == Milliseconds(0)
+
+    # restart action
+    assert timer.status == Status.RANG
+    timer.restart()
+    assert timer.status == Status.TICKING
+    assert timer.init_duration == timer.duration_left
+    assert timer.last_tick_time is None
+    assert timer.time_since_rang is None
+
+    # stop action
+    timer = new_rang_timer()
     timer.stop()
     assert timer.status == Status.IDLE
     assert timer.init_duration == timer.duration_left
