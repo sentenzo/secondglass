@@ -16,6 +16,15 @@ def test_values() -> None:
     timer.time_since_rang = Milliseconds(0)
     timer.time_since_rang_text
 
+    timer._status = Status.TICKING
+    timer.init_duration = Milliseconds(1000)
+    timer.duration_left = Milliseconds(1000)
+    assert timer.progress == 0.0
+    timer.duration_left = Milliseconds(200)
+    assert timer.progress == 0.8
+    timer.duration_left = Milliseconds(0)
+    assert timer.progress == 1.0
+
 
 def test_set_duration() -> None:
     timer = Timer()
@@ -38,6 +47,7 @@ def test_idle_transitions() -> None:
     assert timer.init_duration == timer.duration_left == DEFAULT_DURATION
     assert timer.last_tick_time is None
     assert timer.time_since_rang is None
+    assert timer.progress == 0.0
 
     # invalid actions check
     for action in (timer.stop, timer.restart, timer.pause, timer.resume):
@@ -80,6 +90,7 @@ def test_ticking_transitions() -> None:
     sleep(0.01)
     timer.tick()
     assert timer.last_tick_time > old_last_tick_time  # type: ignore
+    assert 0 < timer.progress < 1
     assert timer.init_duration > timer.duration_left
     assert timer.status == Status.TICKING
     assert timer.time_since_rang is None
@@ -167,6 +178,7 @@ def test_paused_transitions() -> None:
     timer.tick()
     assert timer.last_tick_time is None
     assert timer.status == Status.PAUSED
+    assert 0 < timer.progress < 1
 
     # resume action
     old_duration_left = timer.duration_left
@@ -224,6 +236,7 @@ def test_rang_transitions() -> None:
             assert timer.duration_left == Milliseconds(0)
             assert timer.last_tick_time is not None
             assert timer.time_since_rang is not None
+            assert timer.progress == 1.0
         return timer
 
     timer = new_rang_timer(True)  # check init

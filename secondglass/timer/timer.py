@@ -3,7 +3,7 @@ from functools import wraps
 from time import time
 from typing import Any, Callable
 
-from .exceptions import TimerInvalidAction, TimerValueError, TimerException
+from .exceptions import TimerException, TimerInvalidAction, TimerValueError
 from .msec import MSEC_IN_SEC, Milliseconds
 
 DEFAULT_DURATION = Milliseconds.from_minutes(5)
