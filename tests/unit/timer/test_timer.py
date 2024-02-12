@@ -36,6 +36,7 @@ def test_set_duration() -> None:
     assert timer.init_duration == DEFAULT_DURATION
     timer._set_duration(new_duration_text)
     assert timer.init_duration == new_duration
+    timer._set_duration(123)
     with pytest.raises(TimerValueError):
         timer._set_duration(1.23)  # type: ignore
 

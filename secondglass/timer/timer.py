@@ -90,11 +90,11 @@ class Timer:
         else:
             raise TimerException(f"Unknown status: {self._status}")
 
-    def _set_duration(self, duration: str | Milliseconds) -> None:
+    def _set_duration(self, duration: str | int) -> None:
         if isinstance(duration, str):
             self.init_duration = Milliseconds.from_text(duration)
-        elif isinstance(duration, Milliseconds):
-            self.init_duration = duration
+        elif isinstance(duration, int):
+            self.init_duration = Milliseconds(duration)
         else:
             raise TimerValueError(
                 f"Attempt to init duration as {type(duration).__name__}"
@@ -129,10 +129,17 @@ class Timer:
         self._status = Status.TICKING
 
     def _ring(self) -> None:
-        print("RING!")
+        pass
+
+    def _tick(self) -> None:
+        print("\033[A\033[0K", end="")  # clear the last line
+        print("\033[A\033[0K", end="")  # clear the last line
+        print("Progress:", self.progress)
+        print("Time left:", self.duration_left_text)
 
     @_requires_state(Status.IDLE, Status.TICKING, Status.PAUSED, Status.RANG)
     def tick(self) -> None:
+        self._tick()
         now: Milliseconds = Milliseconds(time() * MSEC_IN_SEC)
         if self.last_tick_time is None:
             if self.status in (Status.TICKING, Status.RANG):

@@ -92,6 +92,6 @@ class Milliseconds(int):
             else:
                 words.append(name + "s")
         if not words:
-            return "0"
+            return "0 seconds"
         else:
             return " ".join(words)
