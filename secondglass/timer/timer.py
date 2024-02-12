@@ -128,18 +128,8 @@ class Timer:
     def resume(self) -> None:
         self._status = Status.TICKING
 
-    def _ring(self) -> None:
-        pass
-
-    def _tick(self) -> None:
-        print("\033[A\033[0K", end="")  # clear the last line
-        print("\033[A\033[0K", end="")  # clear the last line
-        print("Progress:", self.progress)
-        print("Time left:", self.duration_left_text)
-
     @_requires_state(Status.IDLE, Status.TICKING, Status.PAUSED, Status.RANG)
     def tick(self) -> None:
-        self._tick()
         now: Milliseconds = Milliseconds(time() * MSEC_IN_SEC)
         if self.last_tick_time is None:
             if self.status in (Status.TICKING, Status.RANG):
@@ -149,7 +139,6 @@ class Timer:
         if self.status == Status.TICKING:
             if time_passed >= self.duration_left:
                 self.duration_left = Milliseconds(0)
-                self._ring()
                 self._status = Status.RANG
                 self.time_since_rang = time_passed - self.duration_left
             else:
