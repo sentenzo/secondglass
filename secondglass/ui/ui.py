@@ -5,5 +5,5 @@ class UI:
     def __init__(self, timer: Timer) -> None:
         raise NotImplementedError
 
-    def run():
+    def run(self) -> None:
         raise NotImplementedError
