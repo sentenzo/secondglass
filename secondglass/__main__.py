@@ -1,5 +1,5 @@
-from secondglass.demo import console_demo, thread_demo  # noqa: F401
+from secondglass.timer import Timer
+from secondglass.ui import ConsoleUI  # noqa: F401
 
 if __name__ == "__main__":
-    # console_demo()
-    thread_demo()
+    ConsoleUI(Timer()).run()
