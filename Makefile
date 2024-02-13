@@ -1,6 +1,16 @@
+PACKAGE_NAME = secondglass
 PROJECT_DIR = secondglass
 
 CODE = ${PROJECT_DIR} tests
+
+# https://stackoverflow.com/a/4511164/2493536
+ifdef OS # Windows
+   PATH_ARG_SEP=;
+else
+   ifeq ($(shell uname), Linux) # Linux
+	  PATH_ARG_SEP=:
+   endif
+endif
 
 run:
 	poetry run python -m ${PROJECT_DIR}
@@ -19,3 +29,16 @@ test:
 
 test-all:
 	poetry run pytest -vsx
+
+build: lint test
+	poetry run pyinstaller \
+	    --workpath ./build/.pyinstaller/build \
+	    --distpath ./build \
+	    --specpath ./build/.pyinstaller \
+	    --noconsole \
+	    --onefile \
+	    --name $(PACKAGE_NAME) \
+	    --icon ../../$(PACKAGE_NAME)/rec/hourglass-circle-filled.ico \
+		--add-data ../../$(PACKAGE_NAME)/rec/*$(PATH_ARG_SEP)./$(PACKAGE_NAME)/rec \
+	    --add-data ../../$(PACKAGE_NAME)/progress/TaskbarLib.tlb$(PATH_ARG_SEP)./$(PACKAGE_NAME)/progress \
+		$(PACKAGE_NAME)/__main__.py

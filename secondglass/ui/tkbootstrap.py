@@ -3,6 +3,7 @@ from tkinter import Misc
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import BOTH, CENTER, TOP, YES
 
+from secondglass.helpers import pyinstaller_fix_path
 from secondglass.progress import IProgressIndicator, ProgressIndicator
 from secondglass.timer import Status, Timer
 
@@ -46,10 +47,12 @@ class MyAwesomeApp(ttk.Frame):
 
 class TkbUI(UI):
     def __init__(self, timer: Timer) -> None:
+        icon_path = pyinstaller_fix_path("secondglass/rec/clock.png")
         self.app = ttk.Window(
             title="MyAwesomeApp",
             themename="cosmo",
             minsize=(240, 64),
+            iconphoto=icon_path,
             # resizable=(False, False),
         )
         MyAwesomeApp(self.app)
