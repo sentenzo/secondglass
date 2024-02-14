@@ -18,7 +18,7 @@ class ProgressIndicatorWin(IProgressIndicator):
     def __init__(self, window_id: int) -> None:
         self.window_handler = window_id
         if not sys.platform == "win32":
-            raise NotImplementedError("Can only ran on Windows")
+            raise NotImplementedError("Can only run on Windows")
 
         import comtypes.client as cc
 
@@ -29,6 +29,7 @@ class ProgressIndicatorWin(IProgressIndicator):
             "{56FDF344-FD6D-11d0-958A-006097C9A090}",
             interface=ITaskbarList3,
         )
+        self.taskbar.HrInit()
         self.taskbar.ActivateTab(self.window_handler)
         self.set_value(0.0)
         self.set_state_noprogress()

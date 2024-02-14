@@ -56,7 +56,10 @@ class TkbUI(UI):
             # resizable=(False, False),
         )
         MyAwesomeApp(self.app)
-        hwnd = self.app.winfo_id()  # int(app.wm_frame(), 16)
+        self.app.update()
+        hwnd = int(self.app.wm_frame(), 16)  # do it only after `.update()`
+        # hwnd = self.app.winfo_id()
+        # hwnd = int(self.app.frame(), 16)
         self.pind: IProgressIndicator = ProgressIndicator(window_id=hwnd)
 
     def run(self) -> None:
