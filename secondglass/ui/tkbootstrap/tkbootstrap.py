@@ -8,7 +8,58 @@ from secondglass.helpers import pyinstaller_fix_path
 from secondglass.progress import IProgressIndicator, ProgressIndicator
 from secondglass.timer import Status, Timer
 
-from .ui import UI
+from ..ui import UI
+
+# class InputFrame(tb.Frame):
+#     def __init__(self, master: tk.Misc | None = None) -> None:
+#         super().__init__(master)
+
+#         self.timer_text = tb.StringVar(value="5 minutes")
+#         self.font_size = 16
+#         self.padding = tb.IntVar(value=12)
+
+#         self.pack(
+#             fill=c.BOTH,
+#             expand=c.YES,
+#             padx=self.padding,
+#             pady=self.padding,
+#         )
+
+
+# class ProgressFrame(tb.Frame):
+#     def __init__(self, master: tk.Misc | None = None) -> None:
+#         super().__init__(master)
+
+#         self.pack(
+#             fill=c.BOTH,
+#             expand=c.YES,
+#         )
+#         tb.Progressbar(
+#             self,
+#             maximum=1.0,
+#             value=0.35,
+#             bootstyle=c.DEFAULT,
+#         ).pack(
+#             # anchor=S,
+#             # side=BOTTOM,
+#             fill=c.X,
+#             expand=c.NO,
+#             padx=(2, 2),
+#             pady=(1, 2),
+#             ipady=1,
+#         )
+
+
+# class MainFrame(tb.Frame):
+#     def __init__(self, master: tk.Misc | None = None) -> None:
+#         super().__init__(master)
+
+#         self.pack(
+#             fill=c.BOTH,
+#             expand=c.YES,
+#         )
+#         InputFrame(self)
+#         ProgressFrame(self)
 
 
 class MyAwesomeApp(tb.Frame):
@@ -21,9 +72,7 @@ class MyAwesomeApp(tb.Frame):
             expand=c.YES,
         )
 
-        self.running = tb.BooleanVar(value=False)
-        self.afterid = tb.StringVar()
-        self.elapsed = tb.IntVar()
+        self.font_size = tb.IntVar(value=16)
         self.timer_text = tb.StringVar(value="5 minutes")
 
         self.create_layout()
@@ -36,17 +85,40 @@ class MyAwesomeApp(tb.Frame):
             justify=c.CENTER,
             font=Font(size=16),
         )
+
+        def on_size_change(e: tk.Event) -> None:
+            # print(e.width, e.height)
+            new_font_size = int(12 * e.width / 240)
+            entry.config(font=Font(size=new_font_size))
+            # print(new_font_size)
+
+        entry.bind("<Configure>", on_size_change)
         return entry
 
     def create_buttons(self) -> tb.Frame:
         btn_frame = tb.Frame(
             self,
         )
-        btn_start = tb.Button(btn_frame, text="start", bootstyle=c.PRIMARY)
-        btn_restart = tb.Button(btn_frame, text="restart", bootstyle=c.WARNING)
-        btn_pause = tb.Button(btn_frame, text="pause", bootstyle=c.SECONDARY)
-        btn_resume = tb.Button(btn_frame, text="resume", bootstyle=c.PRIMARY)
-        btn_stop = tb.Button(btn_frame, text="stop", bootstyle=c.WARNING)
+
+        def create_button(text: str, style: str = c.PRIMARY) -> tb.Button:
+            def cmd() -> None:
+                self.timer_text.set(text)
+
+            btn = tb.Button(
+                btn_frame,
+                text=text,
+                bootstyle=(style, c.LINK),  # OUTLINE LINK
+                cursor="hand2",
+                command=cmd,
+            )
+            return btn
+
+        btn_start = create_button("start")
+        btn_restart = create_button("restart")
+        btn_pause = create_button("pause")
+        btn_resume = create_button("resume")
+        btn_stop = create_button("stop")
+
         btn_start.pack(side=c.LEFT, padx=2, pady=2)
         btn_restart.pack(side=c.LEFT, padx=2, pady=2)
         btn_pause.pack(side=c.LEFT, padx=2, pady=2)
@@ -96,8 +168,8 @@ class TkbUI(UI):
         icon_path = pyinstaller_fix_path("secondglass/rec/clock.png")
         self.app = tb.Window(
             title="MyAwesomeApp",
-            themename="minty",
-            minsize=(240, 64),
+            themename="simplex",  # minty lumen sandstone simplex
+            minsize=(240, 100),
             iconphoto=icon_path,
             # resizable=(False, False),
         )
