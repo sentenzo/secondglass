@@ -14,7 +14,7 @@ TBPF_PAUSED = 0x00000008
 PROGRESS_MAX_VAL = 100_000
 
 
-class ProgressIndicatorWin(IProgressIndicator):
+class TaskbarProgressIndicatorWin(IProgressIndicator):
     def __init__(self, window_id: int) -> None:
         self.window_handler = window_id
         if not sys.platform == "win32":
