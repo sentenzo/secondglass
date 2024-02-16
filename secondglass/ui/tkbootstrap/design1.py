@@ -2,8 +2,6 @@
 # type: ignore
 
 import tkinter as tk
-from cgitb import text
-from textwrap import fill
 from tkinter.font import Font
 
 import ttkbootstrap as tb
