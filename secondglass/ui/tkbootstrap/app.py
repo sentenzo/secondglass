@@ -1,9 +1,7 @@
 import ttkbootstrap as tb
 
 from .main_frame import MainFrame
-
-MIN_SIZE = (280, 120)
-INIT_SIZE = (400, 180)
+from .params import WINDOW_INIT_SIZE, WINDOW_MIN_SIZE
 
 
 class AppWindow(tb.Window):
@@ -11,8 +9,8 @@ class AppWindow(tb.Window):
         super().__init__(
             title="SecondGlass",
             themename="simplex",
-            minsize=MIN_SIZE,
-            size=INIT_SIZE,
+            minsize=WINDOW_MIN_SIZE,
+            size=WINDOW_INIT_SIZE,
         )
         main_frame = MainFrame(self)
         main_frame.create_all()

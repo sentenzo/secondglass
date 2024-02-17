@@ -4,6 +4,8 @@ import ttkbootstrap as tb
 
 from secondglass.timer import Timer
 
+WINDOW_MIN_SIZE = (280, 120)
+WINDOW_INIT_SIZE = (400, 180)
 FONT_INIT_SIZE = 16
 FONT_FAMILY = "Areal"
 PADDING = 10
@@ -20,3 +22,9 @@ class Params:
         default_factory=lambda: tb.StringVar(value="text")
     )
     size: tb.DoubleVar = field(default_factory=lambda: tb.DoubleVar(value=1.0))
+
+    def update_size(self, current_size: tuple[int, int]) -> None:
+        old_size = self.size.get()
+        new_size = current_size[0] / WINDOW_INIT_SIZE[0]
+        if old_size != new_size:
+            self.size.set(new_size)
