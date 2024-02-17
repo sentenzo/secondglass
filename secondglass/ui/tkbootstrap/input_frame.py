@@ -71,6 +71,12 @@ class InputFrame(tb.Frame):
         self.btn_resume.pack(side=c.LEFT)
         self.btn_restart.pack(side=c.LEFT)
 
+    def animate_all(self) -> None:
+        raise NotImplementedError
+
+    def update_all(self) -> None:
+        pass
+
     # def create_entry(self) -> tb.Entry:
     #     entry = tb.Entry(
     #         self.container,

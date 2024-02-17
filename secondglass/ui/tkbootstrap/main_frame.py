@@ -3,10 +3,10 @@ import tkinter as tk
 import ttkbootstrap as tb
 import ttkbootstrap.constants as c
 
-from secondglass.timer import Timer  # noqa: F401
+from secondglass.timer import Status, Timer  # noqa: F401
 
 from .input_frame import InputFrame
-from .params import Params
+from .params import RENDER_DELAY_MS, Params
 
 
 class MainFrame(tb.Frame):
@@ -14,6 +14,7 @@ class MainFrame(tb.Frame):
         super().__init__(master)
 
         self.params = Params()
+        self.params.timer.start()  # dbg
 
     def create_all(self) -> None:
         self.progressbar = tb.Progressbar(
@@ -34,34 +35,17 @@ class MainFrame(tb.Frame):
         )
         self.progressbar.place(
             anchor=c.CENTER,
-            relheight=1.01,
-            relwidth=1.01,
-            relx=0.5,
-            rely=0.5,
+            relheight=1.01,  # aliasing fix
+            relwidth=1.005,  # aliasing fix
+            relx=0.5,  # center X
+            rely=0.5,  # center Y
         )
         self.input_frame.pack_all()
 
     def animate_all(self) -> None:
-        pass
+        self.params.timer.tick()
+        self.update_all()
+        self.after(RENDER_DELAY_MS, self.animate_all)
 
-    def animate_timer(self) -> None:
-        pass
-
-    # def update(self) -> None:
-    #     self.timer.tick()
-    #     self.update_progressbar()
-
-    # def update_progressbar(self) -> None:
-    #     self.progressbar_var.set(self.timer.progress)
-
-
-if __name__ == "__main__":
-    app = tb.Window(
-        title="123",
-        themename="simplex",
-        minsize=(280, 120),
-    )
-    mf = MainFrame(app)
-    mf.create_all()
-    mf.pack_all()
-    app.mainloop()
+    def update_all(self) -> None:
+        self.params.progress.set(self.params.timer.progress)

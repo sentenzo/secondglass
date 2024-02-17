@@ -17,6 +17,7 @@ class AppWindow(tb.Window):
         main_frame = MainFrame(self)
         main_frame.create_all()
         main_frame.pack_all()
+        main_frame.animate_all()
 
 
 if __name__ == "__main__":

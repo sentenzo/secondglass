@@ -7,6 +7,7 @@ from secondglass.timer import Timer
 FONT_INIT_SIZE = 16
 FONT_FAMILY = "Areal"
 PADDING = 10
+RENDER_DELAY_MS = 50  # 0.05 sec
 
 
 @dataclass
