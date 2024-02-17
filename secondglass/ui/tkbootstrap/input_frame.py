@@ -1,73 +1,12 @@
 import tkinter as tk
-from dataclasses import dataclass, field
 from tkinter.font import Font
 
 import ttkbootstrap as tb
 import ttkbootstrap.constants as c
 
-from secondglass.timer import Timer
+from secondglass.timer import Timer  # noqa: F401
 
-FONT_INIT_SIZE = 16
-FONT_FAMILY = "Areal"
-PADDING = 10
-
-
-@dataclass
-class Params:
-    timer: Timer = field(default_factory=Timer)
-    progress: tb.DoubleVar = field(
-        default_factory=lambda: tb.DoubleVar(value=0.6)
-    )
-    text: tb.StringVar = field(
-        default_factory=lambda: tb.StringVar(value="text")
-    )
-    size: tb.DoubleVar = field(default_factory=lambda: tb.DoubleVar(value=1.0))
-
-
-class MainFrame(tb.Frame):
-    def __init__(self, master: tk.Misc | None = None) -> None:
-        super().__init__(master)
-
-        self.params = Params()
-
-    def create_all(self) -> None:
-        self.progressbar = tb.Progressbar(
-            self,
-            maximum=1.0,
-            variable=self.params.progress,
-            bootstyle=c.DEFAULT,
-        )
-        # the order IS important
-        # InputFrame should go after Progressbar
-        self.input_frame = InputFrame(self, self.params)
-        self.input_frame.create_all()
-
-    def pack_all(self) -> None:
-        self.pack(
-            expand=c.YES,
-            fill=c.BOTH,
-        )
-        self.progressbar.place(
-            anchor=c.CENTER,
-            relheight=1.01,
-            relwidth=1.01,
-            relx=0.5,
-            rely=0.5,
-        )
-        self.input_frame.pack_all()
-
-    def animate_all(self) -> None:
-        pass
-
-    def animate_timer(self) -> None:
-        pass
-
-    # def update(self) -> None:
-    #     self.timer.tick()
-    #     self.update_progressbar()
-
-    # def update_progressbar(self) -> None:
-    #     self.progressbar_var.set(self.timer.progress)
+from .params import FONT_FAMILY, FONT_INIT_SIZE, PADDING, Params
 
 
 class InputFrame(tb.Frame):
@@ -156,15 +95,3 @@ class InputFrame(tb.Frame):
     #     entry.bind("<FocusOut>", focus_out)
 
     #     return entry
-
-
-if __name__ == "__main__":
-    app = tb.Window(
-        title="123",
-        themename="simplex",
-        minsize=(280, 120),
-    )
-    mf = MainFrame(app)
-    mf.create_all()
-    mf.pack_all()
-    app.mainloop()
