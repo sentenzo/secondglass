@@ -3,17 +3,13 @@ import tkinter as tk
 import ttkbootstrap as tb
 import ttkbootstrap.constants as c
 
-from secondglass.timer import Status, Timer  # noqa: F401
-
+from .frame import Frame
 from .input_frame import InputFrame
-from .params import RENDER_DELAY_MS, Params
 
 
-class MainFrame(tb.Frame):
+class MainFrame(Frame):
     def __init__(self, master: tk.Misc | None = None) -> None:
         super().__init__(master)
-
-        self.params = Params()
         self.params.timer.start()  # dbg
 
     def create_all(self) -> None:
@@ -42,10 +38,10 @@ class MainFrame(tb.Frame):
         )
         self.input_frame.pack_all()
 
-    def animate_all(self) -> None:
-        self.params.timer.tick()
-        self.update_all()
-        self.after(RENDER_DELAY_MS, self.animate_all)
+    def set_callbacks(self) -> None:
+        self.input_frame.set_callbacks()
 
     def update_all(self) -> None:
         self.params.progress.set(self.params.timer.progress)
+        self.input_frame.update_all()
+        self.params.update_size((self.winfo_width(), self.winfo_height()))
