@@ -9,17 +9,18 @@ WINDOW_INIT_SIZE = (400, 180)
 FONT_INIT_SIZE = 16
 FONT_FAMILY = "Areal"
 PADDING = 10
-RENDER_DELAY_MS = 50  # 0.05 sec
+RENDER_DELAY_MS = 100  # 0.1 sec
+INIT_TEXT = "5 minutes"
 
 
 @dataclass
 class Params:
     timer: Timer = field(default_factory=Timer)
     progress: tb.DoubleVar = field(
-        default_factory=lambda: tb.DoubleVar(value=0.6)
+        default_factory=lambda: tb.DoubleVar(value=0.0)
     )
     text: tb.StringVar = field(
-        default_factory=lambda: tb.StringVar(value="text")
+        default_factory=lambda: tb.StringVar(value=INIT_TEXT)
     )
     size: tb.DoubleVar = field(default_factory=lambda: tb.DoubleVar(value=1.0))
 

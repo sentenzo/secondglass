@@ -10,7 +10,6 @@ from .input_frame import InputFrame
 class MainFrame(Frame):
     def __init__(self, master: tk.Misc | None = None) -> None:
         super().__init__(master)
-        self.params.timer.start()  # dbg
 
     def create_all(self) -> None:
         self.progressbar = tb.Progressbar(

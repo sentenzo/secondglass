@@ -70,10 +70,12 @@ class InputFrame(Frame):
         self.btn_container.set_callbacks()
 
         def entry_focus_in(event: tk.Event) -> None:
-            print("entry_focus_in")
+            # print("entry_focus_in")
+            pass
 
         def entry_focus_out(event: tk.Event) -> None:
-            print("entry_focus_out")
+            # print("entry_focus_out")
+            pass
 
         self.entry.bind("<FocusIn>", entry_focus_in)
         self.entry.bind("<FocusOut>", entry_focus_out)
