@@ -79,3 +79,13 @@ class InputFrame(Frame):
 
         self.entry.bind("<FocusIn>", entry_focus_in)
         self.entry.bind("<FocusOut>", entry_focus_out)
+
+        def return_pressed(event: tk.Event) -> None:
+            for btn in [
+                self.btn_container.btn_start,
+                self.btn_container.btn_restart,
+            ]:
+                if btn.winfo_ismapped():
+                    btn.invoke()
+
+        self.entry.bind("<Return>", return_pressed)
