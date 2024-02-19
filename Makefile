@@ -38,7 +38,7 @@ build: lint test
 	    --noconsole \
 	    --onefile \
 	    --name $(PACKAGE_NAME) \
-	    --icon ../../$(PACKAGE_NAME)/rec/hourglass-circle-filled.ico \
-		--add-data ../../$(PACKAGE_NAME)/rec/*$(PATH_ARG_SEP)./$(PACKAGE_NAME)/rec \
+	    --icon ../../$(PACKAGE_NAME)/resources/icons/clock.ico \
+		--add-data ../../$(PACKAGE_NAME)/resources/$(PATH_ARG_SEP)./$(PACKAGE_NAME)/resources \
 	    --add-data ../../$(PACKAGE_NAME)/progress/TaskbarLib.tlb$(PATH_ARG_SEP)./$(PACKAGE_NAME)/progress \
 		$(PACKAGE_NAME)/__main__.py
