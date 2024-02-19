@@ -8,9 +8,13 @@ import ttkbootstrap.constants as c
 from secondglass.timer import Status
 
 from .frame import Frame
-from .params import FONT_FAMILY, FONT_INIT_SIZE, UI_THEME, Params
-
-FONT_PROPORTION = 0.6
+from .params import (
+    BTN_FONT_PROPORTION,
+    FONT_FAMILY,
+    FONT_INIT_SIZE,
+    UI_THEME,
+    Params,
+)
 
 
 class BtnFrame(Frame):
@@ -19,7 +23,7 @@ class BtnFrame(Frame):
 
     def create_all(self) -> None:
         self.font = Font(
-            family=FONT_FAMILY, size=int(FONT_INIT_SIZE * FONT_PROPORTION)
+            family=FONT_FAMILY, size=int(FONT_INIT_SIZE * BTN_FONT_PROPORTION)
         )
         tb.Style(UI_THEME).configure("My.Link.TButton", font=self.font)
 
@@ -90,7 +94,9 @@ class BtnFrame(Frame):
 
         def on_size_change(name: str, ind: str | int, method: str) -> None:
             new_size = self.params.size.get()
-            new_font_size = int(FONT_INIT_SIZE * FONT_PROPORTION * new_size)
+            new_font_size = int(
+                FONT_INIT_SIZE * BTN_FONT_PROPORTION * new_size
+            )
             self.font.config(size=new_font_size)
 
         self.params.size.trace_add("write", on_size_change)

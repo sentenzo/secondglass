@@ -5,10 +5,11 @@ import ttkbootstrap as tb
 from secondglass.timer import Timer
 
 UI_THEME = "simplex"
-WINDOW_MIN_SIZE = (280, 120)
+WINDOW_MIN_SIZE = (280, 126)
 WINDOW_INIT_SIZE = (400, 180)
-FONT_INIT_SIZE = 17
-FONT_FAMILY = "Areal"
+FONT_INIT_SIZE = 18
+FONT_FAMILY = "Calibri Light"
+BTN_FONT_PROPORTION = 0.7
 PADDING = 10
 RENDER_DELAY_MS = 30  # 0.03 sec
 INIT_TEXT = "5 minutes"
