@@ -4,6 +4,7 @@ import ttkbootstrap as tb
 import ttkbootstrap.constants as c
 
 from secondglass.progress import IProgressIndicator, ProgressIndicator
+from secondglass.timer import Status
 
 from .frame import Frame
 from .input_frame import InputFrame
@@ -50,6 +51,14 @@ class MainFrame(Frame):
 
     def update_all(self) -> None:
         self.params.progress.set(self.params.timer.progress)
+
         self.progress_indicator.set_value(self.params.timer.progress)
+        {
+            Status.IDLE: self.progress_indicator.set_state_normal,
+            Status.PAUSED: self.progress_indicator.set_state_paused,
+            Status.TICKING: self.progress_indicator.set_state_normal,
+            Status.RANG: self.progress_indicator.set_state_error,
+        }[self.params.timer.status]()
+
         self.input_frame.update_all()
         self.params.update_size((self.winfo_width(), self.winfo_height()))
