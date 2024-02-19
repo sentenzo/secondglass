@@ -13,6 +13,7 @@ from .input_frame import InputFrame
 class MainFrame(Frame):
     def __init__(self, master: tk.Misc | None = None) -> None:
         super().__init__(master)
+        self.prev_status: Status | None = None
 
     def create_all(self) -> None:
         self.progressbar = tb.Progressbar(
@@ -49,21 +50,31 @@ class MainFrame(Frame):
     def set_callbacks(self) -> None:
         self.input_frame.set_callbacks()
 
+    def _put_app_on_top(self) -> None:
+        app = self.winfo_toplevel()
+        app.wm_deiconify()  # un-minimize
+        app.wm_attributes("-topmost", True)
+        app.wm_attributes("-topmost", False)
+
+    def on_status_change(self, from_: Status | None, to: Status) -> None:
+        if to == Status.IDLE:
+            self.progress_indicator.set_state_normal()
+        elif to == Status.PAUSED:
+            self.progress_indicator.set_state_paused()
+        elif to == Status.TICKING:
+            self.progress_indicator.set_state_normal()
+        elif to == Status.RANG:
+            self.progress_indicator.set_state_error()
+            self.input_frame.btn_container._update_btns_visibility()
+            self._put_app_on_top()
+
     def update_all(self) -> None:
         self.params.progress.set(self.params.timer.progress)
-
         self.progress_indicator.set_value(self.params.timer.progress)
-        {
-            Status.IDLE: self.progress_indicator.set_state_normal,
-            Status.PAUSED: self.progress_indicator.set_state_paused,
-            Status.TICKING: self.progress_indicator.set_state_normal,
-            Status.RANG: self.progress_indicator.set_state_error,
-        }[self.params.timer.status]()
-        if (
-            self.params.timer.status == Status.RANG
-            and self.input_frame.btn_container.btn_pause.winfo_ismapped()
-        ):
-            self.input_frame.btn_container._update_btns_visibility()
+
+        if self.prev_status != self.params.timer.status:
+            self.on_status_change(self.prev_status, self.params.timer.status)
+            self.prev_status = self.params.timer.status
 
         self.input_frame.update_all()
         self.params.update_size((self.winfo_width(), self.winfo_height()))

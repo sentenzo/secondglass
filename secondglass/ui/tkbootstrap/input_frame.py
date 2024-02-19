@@ -4,8 +4,6 @@ from tkinter.font import Font
 import ttkbootstrap as tb
 import ttkbootstrap.constants as c
 
-from secondglass.timer import Timer  # noqa: F401
-
 from .btn_frame import BtnFrame
 from .frame import Frame
 from .params import FONT_FAMILY, FONT_INIT_SIZE, PADDING, Params

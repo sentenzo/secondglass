@@ -50,7 +50,7 @@ class BtnFrame(Frame):
             self.btn_stop,
         ]
 
-        self.btns_visibility = {
+        self.btns_visibility: dict[Status, tuple[tb.Button, ...]] = {
             Status.IDLE: (self.btn_start,),
             Status.TICKING: (self.btn_pause, self.btn_restart, self.btn_stop),
             Status.PAUSED: (self.btn_resume, self.btn_restart, self.btn_stop),
