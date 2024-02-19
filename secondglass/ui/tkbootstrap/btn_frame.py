@@ -42,7 +42,7 @@ class BtnFrame(Frame):
         self.btn_restart = create_btn("restart")
         self.btn_stop = create_btn("stop")
 
-        self.btns_order = [
+        self.btns_ordered = [
             self.btn_start,
             self.btn_pause,
             self.btn_resume,
@@ -63,7 +63,7 @@ class BtnFrame(Frame):
 
     def _update_btns_visibility(self) -> None:
         visible_bnts = self.btns_visibility[self.params.timer.status]
-        for btn in self.btns_order:
+        for btn in self.btns_ordered:
             btn.pack_forget()
         for btn in visible_bnts:
             btn.pack(side=c.LEFT)

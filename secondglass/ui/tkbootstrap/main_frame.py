@@ -59,6 +59,11 @@ class MainFrame(Frame):
             Status.TICKING: self.progress_indicator.set_state_normal,
             Status.RANG: self.progress_indicator.set_state_error,
         }[self.params.timer.status]()
+        if (
+            self.params.timer.status == Status.RANG
+            and self.input_frame.btn_container.btn_pause.winfo_ismapped()
+        ):
+            self.input_frame.btn_container._update_btns_visibility()
 
         self.input_frame.update_all()
         self.params.update_size((self.winfo_width(), self.winfo_height()))
