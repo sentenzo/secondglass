@@ -13,6 +13,7 @@ class AppWindow(tb.Window):
             size=WINDOW_INIT_SIZE,
         )
         main_frame = MainFrame(self)
+        main_frame.update()  # to get a correct hwnd in ProgressIndicator
         main_frame.create_all()
         main_frame.pack_all()
         main_frame.animate_all()

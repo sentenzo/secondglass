@@ -3,6 +3,8 @@ import tkinter as tk
 import ttkbootstrap as tb
 import ttkbootstrap.constants as c
 
+from secondglass.progress import IProgressIndicator, ProgressIndicator
+
 from .frame import Frame
 from .input_frame import InputFrame
 
@@ -23,6 +25,12 @@ class MainFrame(Frame):
         self.input_frame = InputFrame(self, self.params)
         self.input_frame.create_all()
 
+        # `hwnd` can change after the first. Therefore:
+        #  run `main_frame.update()` before `main_frame.create_all()`
+        #  (see ./app.py)
+        hwnd = int(self.winfo_toplevel().wm_frame(), 16)
+        self.progress_indicator: IProgressIndicator = ProgressIndicator(hwnd)
+
     def pack_all(self) -> None:
         self.pack(
             expand=c.YES,
@@ -42,5 +50,6 @@ class MainFrame(Frame):
 
     def update_all(self) -> None:
         self.params.progress.set(self.params.timer.progress)
+        self.progress_indicator.set_value(self.params.timer.progress)
         self.input_frame.update_all()
         self.params.update_size((self.winfo_width(), self.winfo_height()))
