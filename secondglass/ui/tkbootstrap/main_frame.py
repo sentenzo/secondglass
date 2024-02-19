@@ -3,6 +3,7 @@ import tkinter as tk
 import ttkbootstrap as tb
 import ttkbootstrap.constants as c
 
+from secondglass.player import play_beep
 from secondglass.progress import IProgressIndicator, ProgressIndicator
 from secondglass.timer import Status
 
@@ -67,6 +68,7 @@ class MainFrame(Frame):
             self.progress_indicator.set_state_error()
             self.input_frame.btn_container._update_btns_visibility()
             self._put_app_on_top()
+            play_beep()
 
     def update_all(self) -> None:
         self.params.progress.set(self.params.timer.progress)
