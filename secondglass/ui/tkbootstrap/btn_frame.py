@@ -1,13 +1,16 @@
 import tkinter as tk
+from tkinter.font import Font
 from typing import Callable
 
 import ttkbootstrap as tb
 import ttkbootstrap.constants as c
 
-from secondglass.timer import Status, Timer  # noqa: F401
+from secondglass.timer import Status
 
 from .frame import Frame
-from .params import FONT_FAMILY, FONT_INIT_SIZE, PADDING, Params  # noqa: F401
+from .params import FONT_FAMILY, FONT_INIT_SIZE, UI_THEME, Params
+
+FONT_PROPORTION = 0.6
 
 
 class BtnFrame(Frame):
@@ -15,12 +18,18 @@ class BtnFrame(Frame):
         super().__init__(master, params)
 
     def create_all(self) -> None:
+        self.font = Font(
+            family=FONT_FAMILY, size=int(FONT_INIT_SIZE * FONT_PROPORTION)
+        )
+        tb.Style(UI_THEME).configure("My.Link.TButton", font=self.font)
+
         def create_btn(text: str) -> tb.Button:
             return tb.Button(
                 self,
                 text=text,
-                bootstyle=(c.LINK),
+                # bootstyle=(c.LINK),
                 cursor="hand2",
+                style="My.Link.TButton",
             )
 
         self.btn_start = create_btn("start")
@@ -78,3 +87,10 @@ class BtnFrame(Frame):
         bind_btn_handler(self.btn_resume, self.params.timer.resume)
         bind_btn_handler(self.btn_restart, self.params.timer.restart)
         bind_btn_handler(self.btn_stop, self.params.timer.stop)
+
+        def on_size_change(name: str, ind: str | int, method: str) -> None:
+            new_size = self.params.size.get()
+            new_font_size = int(FONT_INIT_SIZE * FONT_PROPORTION * new_size)
+            self.font.config(size=new_font_size)
+
+        self.params.size.trace_add("write", on_size_change)
