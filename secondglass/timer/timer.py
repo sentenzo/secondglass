@@ -73,7 +73,8 @@ class Timer:
                 "Attempt to get time_since_rang_text "
                 "while time_since_rang is None"
             )
-        return self.time_since_rang.to_text()
+        # 1 second latency
+        return Milliseconds(max(0, int(self.time_since_rang) - 1000)).to_text()
 
     @property
     def progress(self) -> float:
