@@ -9,6 +9,7 @@ from secondglass.timer import Status
 
 from .frame import Frame
 from .input_frame import InputFrame
+from .params import UI_THEME
 
 
 class MainFrame(Frame):
@@ -57,6 +58,19 @@ class MainFrame(Frame):
         app.wm_attributes("-topmost", True)
         app.wm_attributes("-topmost", False)
 
+    @staticmethod
+    def get_bootstyle_from_status(status: Status) -> str:
+        if status in (Status.IDLE, Status.TICKING):
+            if UI_THEME in ("cosmo", "litera", "cerculean"):
+                return c.PRIMARY
+            else:
+                return c.INFO
+        return {Status.PAUSED: c.WARNING, Status.RANG: c.DANGER}[status]
+
+    def change_bootstyle(self, bootstyle: str) -> None:
+        self.progressbar.configure(bootstyle=bootstyle)
+        self.input_frame.entry.configure(bootstyle=bootstyle)
+
     def on_status_change(self, from_: Status | None, to: Status) -> None:
         if to == Status.IDLE:
             self.progress_indicator.set_state_normal()
@@ -69,6 +83,9 @@ class MainFrame(Frame):
             self.input_frame.btn_container._update_btns_visibility()
             self._put_app_on_top()
             play_beep()
+        self.change_bootstyle(
+            self.get_bootstyle_from_status(to),
+        )
 
     def update_all(self) -> None:
         self.params.progress.set(self.params.timer.progress)

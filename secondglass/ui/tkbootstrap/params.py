@@ -4,7 +4,7 @@ import ttkbootstrap as tb
 
 from secondglass.timer import Timer
 
-UI_THEME = "simplex"
+UI_THEME = "litera"  # litera cosmo cerculean / superhero darkly
 WINDOW_MIN_SIZE = (280, 126)
 WINDOW_INIT_SIZE = (400, 180)
 FONT_INIT_SIZE = 18
