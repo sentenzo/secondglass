@@ -105,11 +105,18 @@ def test_from_text_exception(test_input: str, exception_type: Type) -> None:
 @pytest.mark.parametrize(
     "test_input,expected_tuple,expected_text",
     [
-        ("42", (0, 42, 0), "42 minutes 0 seconds"),
+        ("0", (0, 0, 0), "0 seconds"),
+        ("0h", (0, 0, 0), "0 seconds"),
+        ("0s", (0, 0, 0), "0 seconds"),
+        ("1s", (0, 0, 1), "1 second"),
+        ("42", (0, 42, 0), "42 minutes"),
+        ("51h", (51, 0, 0), "51 hours"),
+        ("121s", (0, 2, 1), "2 minutes 1 second"),
+        ("54001s", (15, 0, 1), "15 hours 1 second"),
+        ("51h 4min", (51, 4, 0), "51 hours 4 minutes"),
+        ("12 hour 34m 56 sec", (12, 34, 56), "12 hours 34 minutes 56 seconds"),
         ("1h 2m 3s", (1, 2, 3), "1 hour 2 minutes 3 seconds"),
         ("3h 1m 1s", (3, 1, 1), "3 hours 1 minute 1 second"),
-        ("121s", (0, 2, 1), "2 minutes 1 second"),
-        ("51h", (51, 0, 0), "51 hours 0 minutes 0 seconds"),
     ],
 )
 def test_to_text(

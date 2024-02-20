@@ -84,7 +84,7 @@ class Milliseconds(int):
         for number, name in zip(
             self.to_time_units_tuple(), ("hour", "minute", "second")
         ):
-            if number == 0 and len(words) == 0:
+            if number == 0:
                 continue
             words.append(str(number))
             if number == 1:
