@@ -2,20 +2,23 @@ from dataclasses import dataclass, field
 
 import ttkbootstrap as tb
 
+from secondglass.config import SETTINGS
 from secondglass.timer import Timer
 
-UI_THEME = "litera"  # litera cosmo cerculean / superhero darkly
+UI_THEME = SETTINGS.get("STATIC", "ui_theme")
+FONT_INIT_SIZE = SETTINGS.getint("STATIC", "font_init_size")
+FONT_FAMILY = SETTINGS.get("STATIC", "font_family")
+RENDER_DELAY_MS = SETTINGS.getint("STATIC", "render_delay_ms")
+WH_RATIO_THRESHOLD = SETTINGS.getfloat("STATIC", "wh_ratio_threshold")
+
+TEXT_INIT = SETTINGS.get("DYNAMIC", "init_text_input")
+
 WINDOW_MIN_SIZE = (280, 126)
 WINDOW_INIT_SIZE = (400, 180)
-FONT_INIT_SIZE = 18
-FONT_FAMILY = "Calibri Light"
 BTN_FONT_PROPORTION = 0.7
 PADDING = 10
 BTN_PADDING_PROPORTION = 0.2
-RENDER_DELAY_MS = 30  # 0.03 sec
-TEXT_INIT = "5 minutes"
 TEXT_SINCE_RANG = "Time passed since rang:"
-WH_RATIO_THRESHOLD = 2.6
 
 
 @dataclass

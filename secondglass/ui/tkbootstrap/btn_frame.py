@@ -34,7 +34,6 @@ class BtnFrame(Frame):
             return tb.Button(
                 self,
                 text=text,
-                # bootstyle=(c.LINK),
                 cursor="hand2",
                 style="My.Link.TButton",
             )

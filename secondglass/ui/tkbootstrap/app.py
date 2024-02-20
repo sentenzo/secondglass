@@ -1,5 +1,6 @@
 import ttkbootstrap as tb
 
+from secondglass.config import SETTINGS, save_settings
 from secondglass.helpers import pyinstaller_fix_path
 
 from ..ui import UI
@@ -25,7 +26,17 @@ class AppWindow(tb.Window):
         main_frame.pack_all()
         main_frame.animate_all()
 
+        def on_closing() -> None:
+            SETTINGS["DYNAMIC"][
+                "init_text_input"
+            ] = main_frame.params.text_input.get()
+            save_settings(SETTINGS)
+            self.destroy()
+
+        self.protocol("WM_DELETE_WINDOW", on_closing)
+
 
 class TkbUI(UI):
     def run(self) -> None:
+
         AppWindow().mainloop()

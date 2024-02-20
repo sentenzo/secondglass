@@ -52,7 +52,7 @@ class InputFrame(Frame):
             relwidth=1.0,
         )
         self.upper_placeholder.pack(
-            pady=(0, PADDING // 2),  # a hack 😔
+            pady=(0, PADDING // 2),  # a hack 😑
         )
         self.entry.pack(
             fill=c.X,
@@ -78,7 +78,7 @@ class InputFrame(Frame):
             # - fixes the font alignment issue
 
             self.upper_placeholder.pack_configure(
-                pady=(0, new_padding // 2),  # a hack 😔
+                pady=(0, new_padding // 2),  # a hack 😑
             )
 
         self.params.size.trace_add("write", on_size_change)
