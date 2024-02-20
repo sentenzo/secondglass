@@ -11,8 +11,8 @@ RENDER_DELAY_SEC = 0.01
 
 
 class ConsoleUI(UI):
-    def __init__(self, timer: Timer) -> None:
-        self.timer = timer
+    def __init__(self) -> None:
+        self.timer = Timer()
         self.app_close_event = Event()
         self.ticking_thread = self._create_ticking_thread()
 

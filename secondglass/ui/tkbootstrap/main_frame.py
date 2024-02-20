@@ -28,7 +28,7 @@ class MainFrame(Frame):
         self.input_frame = InputFrame(self, self.params)
         self.input_frame.create_all()
 
-        # `hwnd` can change after the first. Therefore:
+        # `hwnd` can change after the first rendering. Therefore:
         #  run `main_frame.update()` before `main_frame.create_all()`
         #  (see ./app.py)
         hwnd = int(self.winfo_toplevel().wm_frame(), 16)

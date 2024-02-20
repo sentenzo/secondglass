@@ -30,6 +30,7 @@ test:
 test-all:
 	poetry run pytest -vsx
 
+.PHONY: build
 build: lint test
 	poetry run pyinstaller \
 	    --workpath ./build/.pyinstaller/build \

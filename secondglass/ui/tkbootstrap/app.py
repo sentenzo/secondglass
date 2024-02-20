@@ -2,6 +2,7 @@ import ttkbootstrap as tb
 
 from secondglass.helpers import pyinstaller_fix_path
 
+from ..ui import UI
 from .main_frame import MainFrame
 from .params import UI_THEME, WINDOW_INIT_SIZE, WINDOW_MIN_SIZE
 
@@ -25,5 +26,6 @@ class AppWindow(tb.Window):
         main_frame.animate_all()
 
 
-if __name__ == "__main__":
-    AppWindow().mainloop()
+class TkbUI(UI):
+    def run(self) -> None:
+        AppWindow().mainloop()
