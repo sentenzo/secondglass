@@ -4,9 +4,17 @@ from tkinter.font import Font
 import ttkbootstrap as tb
 import ttkbootstrap.constants as c
 
+from secondglass.timer.timer import Status
+
 from .btn_frame import BtnFrame
 from .frame import Frame
-from .params import FONT_FAMILY, FONT_INIT_SIZE, PADDING, Params
+from .params import (
+    FONT_FAMILY,
+    FONT_INIT_SIZE,
+    PADDING,
+    TEXT_SINCE_RANG,
+    Params,
+)
 
 
 class InputFrame(Frame):
@@ -73,14 +81,17 @@ class InputFrame(Frame):
         self.btn_container.set_callbacks()
 
         def entry_focus_in(event: tk.Event) -> None:
-            # print("entry_focus_in")
+            if self.params.timer.status == Status.RANG:
+                self.upper_placeholder.configure(text="")
             self.entry.configure(textvariable=self.params.text_input)
-            pass
+            self.entry.select_range(0, c.END)
+            self.entry.icursor(c.END)
 
         def entry_focus_out(event: tk.Event) -> None:
-            # print("entry_focus_out")
+            if self.params.timer.status == Status.RANG:
+                self.upper_placeholder.configure(text=TEXT_SINCE_RANG)
             self.entry.configure(textvariable=self.params.text_output)
-            pass
+            self.entry.select_clear()
 
         self.entry.bind("<FocusIn>", entry_focus_in)
         self.entry.bind("<FocusOut>", entry_focus_out)
@@ -92,5 +103,9 @@ class InputFrame(Frame):
             ]:
                 if btn.winfo_ismapped():
                     btn.invoke()
+            self.focus_set()  # drop focus
 
         self.entry.bind("<Return>", return_pressed)
+
+        # for every other widget to looses focus:
+        self.bind("<Button-1>", lambda _: self.focus_set())

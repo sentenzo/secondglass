@@ -12,7 +12,8 @@ FONT_FAMILY = "Calibri Light"
 BTN_FONT_PROPORTION = 0.7
 PADDING = 10
 RENDER_DELAY_MS = 30  # 0.03 sec
-INIT_TEXT = "5 minutes"
+TEXT_INIT = "5 minutes"
+TEXT_SINCE_RANG = "Time passed since rang:"
 WH_RATIO_THRESHOLD = 2.6
 
 
@@ -23,9 +24,10 @@ class Params:
         default_factory=lambda: tb.DoubleVar(value=0.0)
     )
     text_input: tb.StringVar = field(
-        default_factory=lambda: tb.StringVar(value=INIT_TEXT)
+        default_factory=lambda: tb.StringVar(value=TEXT_INIT)
     )
     text_output: tb.StringVar = field(default_factory=lambda: tb.StringVar())
+    text_message: tb.StringVar = field(default_factory=lambda: tb.StringVar())
     size: tb.DoubleVar = field(default_factory=lambda: tb.DoubleVar(value=1.0))
 
     @staticmethod

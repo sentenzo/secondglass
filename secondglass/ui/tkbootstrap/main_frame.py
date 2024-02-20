@@ -9,7 +9,7 @@ from secondglass.timer import Status
 
 from .frame import Frame
 from .input_frame import InputFrame
-from .params import UI_THEME
+from .params import TEXT_SINCE_RANG, UI_THEME
 
 
 class MainFrame(Frame):
@@ -87,9 +87,7 @@ class MainFrame(Frame):
                 textvariable=self.params.text_output
             )
         elif to == Status.RANG:
-            self.input_frame.upper_placeholder.configure(
-                text="Time passed since rang:"
-            )
+            self.input_frame.upper_placeholder.configure(text=TEXT_SINCE_RANG)
             self.progress_indicator.set_state_error()
             self.input_frame.btn_container._update_btns_visibility()
             self._put_app_on_top()
