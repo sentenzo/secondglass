@@ -16,16 +16,19 @@ class InputFrame(Frame):
     def create_all(self) -> None:
         self.font = Font(family=FONT_FAMILY, size=FONT_INIT_SIZE)
         self.inner_container = tb.Frame(self)
-        self.upper_placeholder = tb.Label(self.inner_container)
+        self.upper_placeholder = tb.Label(
+            self.inner_container, bootstyle=c.SECONDARY
+        )
         self.entry = tb.Entry(
             self.inner_container,
-            textvariable=self.params.text,
+            textvariable=self.params.text_input,
             justify=c.CENTER,
             font=self.font,
             cursor="xterm",
         )
         self.btn_container = BtnFrame(self.inner_container, self.params)
         self.btn_container.create_all()
+        self.upper_placeholder.configure(font=self.btn_container.font)
 
     def pack_all(self) -> None:
         self.pack(
@@ -40,7 +43,9 @@ class InputFrame(Frame):
             rely=0.5,
             relwidth=1.0,
         )
-        self.upper_placeholder.pack()  # margin
+        self.upper_placeholder.pack(
+            # pady=(0, PADDING),
+        )
         self.entry.pack(
             fill=c.X,
             padx=4,
@@ -61,7 +66,7 @@ class InputFrame(Frame):
 
             new_font_size = int(FONT_INIT_SIZE * new_size)
             self.font.config(size=new_font_size)
-            self.params.text.set(self.params.text.get())
+            self.params.text_input.set(self.params.text_input.get())
             # - fixes the font alignment issue
 
         self.params.size.trace_add("write", on_size_change)
@@ -69,10 +74,12 @@ class InputFrame(Frame):
 
         def entry_focus_in(event: tk.Event) -> None:
             # print("entry_focus_in")
+            self.entry.configure(textvariable=self.params.text_input)
             pass
 
         def entry_focus_out(event: tk.Event) -> None:
             # print("entry_focus_out")
+            self.entry.configure(textvariable=self.params.text_output)
             pass
 
         self.entry.bind("<FocusIn>", entry_focus_in)

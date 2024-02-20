@@ -73,12 +73,23 @@ class MainFrame(Frame):
 
     def on_status_change(self, from_: Status | None, to: Status) -> None:
         if to == Status.IDLE:
+            self.input_frame.upper_placeholder.configure(text="")
             self.progress_indicator.set_state_normal()
+            self.input_frame.entry.configure(
+                textvariable=self.params.text_input
+            )
         elif to == Status.PAUSED:
             self.progress_indicator.set_state_paused()
         elif to == Status.TICKING:
+            self.input_frame.upper_placeholder.configure(text="")
             self.progress_indicator.set_state_normal()
+            self.input_frame.entry.configure(
+                textvariable=self.params.text_output
+            )
         elif to == Status.RANG:
+            self.input_frame.upper_placeholder.configure(
+                text="Time passed since rang:"
+            )
             self.progress_indicator.set_state_error()
             self.input_frame.btn_container._update_btns_visibility()
             self._put_app_on_top()
@@ -90,6 +101,10 @@ class MainFrame(Frame):
     def update_all(self) -> None:
         self.params.progress.set(self.params.timer.progress)
         self.progress_indicator.set_value(self.params.timer.progress)
+        if self.params.timer.status == Status.RANG:
+            self.params.text_output.set(self.params.timer.time_since_rang_text)
+        else:
+            self.params.text_output.set(self.params.timer.duration_left_text)
 
         if self.prev_status != self.params.timer.status:
             self.on_status_change(self.prev_status, self.params.timer.status)

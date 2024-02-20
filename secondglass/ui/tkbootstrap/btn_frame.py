@@ -72,24 +72,26 @@ class BtnFrame(Frame):
         def bind_btn_handler(
             btn: tb.Button,
             change_status: Callable,
-            text_var: tb.StringVar | None = None,
+            reinit_timer_vlaue: bool = False,
         ) -> None:
 
             def handler() -> None:
-                if text_var:
-                    change_status(text_var.get())
+                if reinit_timer_vlaue:
+                    timer_vlaue = self.params.text_input.get()
+                    change_status(timer_vlaue)
+                    self.params.text_input.set(
+                        self.params.timer.init_duration_text
+                    )
                 else:
                     change_status()
                 self._update_btns_visibility()
 
             btn.config(command=handler)
 
-        bind_btn_handler(
-            self.btn_start, self.params.timer.start, self.params.text
-        )
+        bind_btn_handler(self.btn_start, self.params.timer.start, True)
         bind_btn_handler(self.btn_pause, self.params.timer.pause)
         bind_btn_handler(self.btn_resume, self.params.timer.resume)
-        bind_btn_handler(self.btn_restart, self.params.timer.restart)
+        bind_btn_handler(self.btn_restart, self.params.timer.restart, True)
         bind_btn_handler(self.btn_stop, self.params.timer.stop)
 
         def on_size_change(name: str, ind: str | int, method: str) -> None:

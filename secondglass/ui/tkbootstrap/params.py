@@ -22,9 +22,10 @@ class Params:
     progress: tb.DoubleVar = field(
         default_factory=lambda: tb.DoubleVar(value=0.0)
     )
-    text: tb.StringVar = field(
+    text_input: tb.StringVar = field(
         default_factory=lambda: tb.StringVar(value=INIT_TEXT)
     )
+    text_output: tb.StringVar = field(default_factory=lambda: tb.StringVar())
     size: tb.DoubleVar = field(default_factory=lambda: tb.DoubleVar(value=1.0))
 
     @staticmethod
