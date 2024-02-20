@@ -10,9 +10,7 @@ from .params import UI_THEME, WINDOW_INIT_SIZE, WINDOW_MIN_SIZE
 
 class AppWindow(tb.Window):
     def __init__(self) -> None:
-        icon_path = pyinstaller_fix_path(
-            "secondglass/resources/icons/clock_24.png"
-        )
+        icon_path = pyinstaller_fix_path("resources/icons/clock_24.png")
         super().__init__(
             title="SecondGlass",
             themename=UI_THEME,

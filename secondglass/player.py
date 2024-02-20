@@ -5,9 +5,7 @@ from secondglass.helpers import pyinstaller_fix_path
 
 FILE_NAME = "186401__lloydevans09__balsa-hit-1.wav"
 
-BEEP_FILE_LOCATION = pyinstaller_fix_path(
-    "secondglass/resources/sounds/" + FILE_NAME
-)
+BEEP_FILE_LOCATION = pyinstaller_fix_path("resources/sounds/" + FILE_NAME)
 
 _cur_source: Source = pyglet.media.load(BEEP_FILE_LOCATION)
 
@@ -27,7 +25,7 @@ from secondglass.helpers import pyinstaller_fix_path
 FILE_NAME = "186401__lloydevans09__balsa-hit-1.wav"
 
 BEEP_FILE_LOCATION = pyinstaller_fix_path(
-    "secondglass/resources/sounds/" + FILE_NAME
+    "resources/sounds/" + FILE_NAME
 )
 mixer.init()
 

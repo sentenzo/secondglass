@@ -39,7 +39,7 @@ build: lint test
 	    --noconsole \
 	    --onefile \
 	    --name $(PACKAGE_NAME) \
-	    --icon ../../$(PACKAGE_NAME)/resources/icons/clock.ico \
-		--add-data ../../$(PACKAGE_NAME)/resources/$(PATH_ARG_SEP)./$(PACKAGE_NAME)/resources \
+	    --icon ../../resources/icons/clock.ico \
+		--add-data ../../resources/$(PATH_ARG_SEP)./resources \
 	    --add-data ../../$(PACKAGE_NAME)/progress/TaskbarLib.tlb$(PATH_ARG_SEP)./$(PACKAGE_NAME)/progress \
 		$(PACKAGE_NAME)/__main__.py
