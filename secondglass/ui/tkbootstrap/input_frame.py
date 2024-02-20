@@ -52,7 +52,7 @@ class InputFrame(Frame):
             relwidth=1.0,
         )
         self.upper_placeholder.pack(
-            # pady=(0, PADDING),
+            pady=(0, PADDING // 2),  # a hack 😔
         )
         self.entry.pack(
             fill=c.X,
@@ -76,6 +76,10 @@ class InputFrame(Frame):
             self.font.config(size=new_font_size)
             self.params.text_input.set(self.params.text_input.get())
             # - fixes the font alignment issue
+
+            self.upper_placeholder.pack_configure(
+                pady=(0, new_padding // 2),  # a hack 😔
+            )
 
         self.params.size.trace_add("write", on_size_change)
         self.btn_container.set_callbacks()
@@ -108,4 +112,5 @@ class InputFrame(Frame):
         self.entry.bind("<Return>", return_pressed)
 
         # for every other widget to looses focus:
+        # (<Button-1> == onclick event)
         self.bind("<Button-1>", lambda _: self.focus_set())

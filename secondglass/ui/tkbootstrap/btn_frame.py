@@ -10,8 +10,10 @@ from secondglass.timer import Status
 from .frame import Frame
 from .params import (
     BTN_FONT_PROPORTION,
+    BTN_PADDING_PROPORTION,
     FONT_FAMILY,
     FONT_INIT_SIZE,
+    PADDING,
     UI_THEME,
     Params,
 )
@@ -22,6 +24,7 @@ class BtnFrame(Frame):
         super().__init__(master, params)
 
     def create_all(self) -> None:
+        self.padding = int(PADDING * BTN_PADDING_PROPORTION)
         self.font = Font(
             family=FONT_FAMILY, size=int(FONT_INIT_SIZE * BTN_FONT_PROPORTION)
         )
@@ -66,7 +69,11 @@ class BtnFrame(Frame):
         for btn in self.btns_ordered:
             btn.pack_forget()
         for btn in visible_bnts:
-            btn.pack(side=c.LEFT)
+            btn.pack(
+                side=c.LEFT,
+                padx=self.padding,
+                pady=self.padding // 2,
+            )
 
     def set_callbacks(self) -> None:
         def bind_btn_handler(
@@ -100,5 +107,13 @@ class BtnFrame(Frame):
                 FONT_INIT_SIZE * BTN_FONT_PROPORTION * new_size
             )
             self.font.config(size=new_font_size)
+
+            self.padding = int(PADDING * BTN_PADDING_PROPORTION * new_size)
+            for btn in self.btns_ordered:
+                if btn in self.btns_visibility[self.params.timer.status]:
+                    btn.pack_configure(
+                        padx=self.padding,
+                        pady=self.padding // 2,
+                    )
 
         self.params.size.trace_add("write", on_size_change)
