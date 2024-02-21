@@ -27,6 +27,7 @@ It was **hugely** inspired by [@dziemborowicz](https://github.com/dziemborowicz)
   - [Software requirements](#software-requirements)
   - [First run](#first-run)
   - [Regular `make` targets](#regular-make-targets)
+- [Licensing](#licensing)
 
 ## Goals
 **Why did I make it**:
@@ -91,6 +92,8 @@ Windows 10 is required.
 - `secondglass.timer` — the core-logics of the app (ui-agnostic)
 - `secondglass.ui.console` — visualization in command line
 - `secondglass.ui.tkbootstrap` — `tkinter`-powered UI
+  - [see more on the event-model I use](secondglass/ui/README.md)
+  - [see more on the window structure](secondglass/ui/tkbootstrap/README.md)
 - `secondglass.progress` — working with Windows toolbar indicator
 
 ### Third party modules
@@ -102,7 +105,7 @@ Windows 10 is required.
 ## How to build
 
 ### Software requirements
-- [python3.11](https://www.python.org/downloads/)
+- [Python 3.11](https://www.python.org/downloads/)
 
 - (optional) [Poetry](https://python-poetry.org)
 - (optional) [make](https://en.wikipedia.org/wiki/Make_(software)) tool
@@ -114,7 +117,7 @@ Windows 10 is required.
    - option 2 - if only having `Poetry`: 
      - in the project directory execute `poetry install`
    - option 3 - if having none:
-     - in the project directory create virtual envirunment and switch to it
+     - in the project directory create virtual environment and switch to it
      - execute `pip install -r requirements.txt`
 2. Run the app: 
   - option 1: `make run`
@@ -127,4 +130,17 @@ Windows 10 is required.
 - `make test` — run unit-tests
 - `make build` — create an executable in a `build` folder
 
+## Licensing
+- this application is licensed under [MIT License](LICENSE)
+- [the application icons](https://github.com/paomedia/small-n-flat) were created by [@paomedia](https://github.com/paomedia/) and are licensed under [CC0 1.0](https://github.com/paomedia/small-n-flat/blob/master/LICENSE)
+- the application sounds belong to a variety of authors:
+  - [LloydEvans09](https://freesound.org/people/LloydEvans09/)'s:
+    - [Light wood](https://freesound.org/people/LloydEvans09/sounds/185846/) — under [CC 4.0](https://creativecommons.org/licenses/by/4.0/)
+    - [Balsa hit 1.wav](https://freesound.org/people/LloydEvans09/sounds/186401/) — under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
+    - [Wood spin](https://freesound.org/people/LloydEvans09/sounds/186993/)  — under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
+    - [spray_can_rattle.wav](https://freesound.org/people/LloydEvans09/sounds/332001/)  — under [CC NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
+  - [ArtOrDie](https://freesound.org/people/ArtOrDie/)'s:
+    - [Ding.wav](https://freesound.org/people/ArtOrDie/sounds/338148/) — under [CC 4.0](https://creativecommons.org/licenses/by/4.0/)
+  - [michael_grinnell](https://freesound.org/people/michael_grinnell/)'s:
+    - [Metalic_Ching_Keys_2.wav](https://freesound.org/people/ArtOrDie/sounds/338148/) — under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
 
