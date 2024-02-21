@@ -83,7 +83,7 @@ Though, in my humble opinion, it maybe needs some slight optimization. Its downs
 
 Windows 10 is required.
 
-1. Download the executable named `secondglass.exe`, from the [latest release](releases/latest)
+1. Download the executable named `secondglass.exe`, from the [latest release](https://github.com/sentenzo/secondglass/releases/latest)
 2. Run the executable
 
 ## What's inside
