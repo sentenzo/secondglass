@@ -18,6 +18,9 @@ run:
 init:
 	poetry install
 
+export_requirements:
+	poetry export --without-hashes --with dev -f requirements.txt --output requirements.txt
+
 lint:
 	poetry run isort ${CODE}
 	poetry run black ${CODE}
