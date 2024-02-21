@@ -91,6 +91,7 @@ class BtnFrame(Frame):
                 else:
                     change_status()
                 self._update_btns_visibility()
+                self.focus_set()  # drop focus
 
             btn.config(command=handler)
 
