@@ -6,7 +6,6 @@ APP_NAME = "secondglass"
 
 default_settings: Mapping[str, Mapping[str, Any]] = {
     "STATIC": {
-        "ui_theme": "darkly",  # litera cosmo cerculean /  superhero darkly
         "font_init_size": 18,
         "font_family": "Calibri Light",
         "render_delay_ms": 30,
@@ -14,6 +13,8 @@ default_settings: Mapping[str, Mapping[str, Any]] = {
     },
     "DYNAMIC": {
         "init_text_input": "5 minutes",
+        "sound": "hit",
+        "ui_theme": "darkly",  # litera cosmo cerculean /  superhero darkly
     },
 }
 CONF_DIR_NAME = APP_NAME

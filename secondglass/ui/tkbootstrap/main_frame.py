@@ -7,6 +7,7 @@ from secondglass.player import play_beep
 from secondglass.progress import IProgressIndicator, ProgressIndicator
 from secondglass.timer import Status
 
+from .context_menu import ContextMenu
 from .frame import Frame
 from .input_frame import InputFrame
 from .params import TEXT_SINCE_RANG, UI_THEME
@@ -50,6 +51,7 @@ class MainFrame(Frame):
         self.input_frame.pack_all()
 
     def set_callbacks(self) -> None:
+        ContextMenu(self).activate()
         self.input_frame.set_callbacks()
 
     def _put_app_on_top(self) -> None:
