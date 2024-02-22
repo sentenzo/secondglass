@@ -29,7 +29,7 @@ class ContextMenu(tb.Menu):
 
             return theme_switch
 
-        group_var = tb.StringVar(value=SETTINGS["DYNAMIC"]["ui_theme"])
+        self.theme_var = tb.StringVar(value=SETTINGS["DYNAMIC"]["ui_theme"])
         for theme in LIGHT_THEME_LIST + ["|"] + DARK_THEME_LIST:
             if theme == "|":
                 theme_menu.add_separator()
@@ -38,7 +38,7 @@ class ContextMenu(tb.Menu):
                     label=theme,
                     value=theme,
                     command=theme_switch_closure(theme),
-                    variable=group_var,
+                    variable=self.theme_var,
                 )
         self.add_cascade(label="Theme", menu=theme_menu)
 
@@ -52,17 +52,17 @@ class ContextMenu(tb.Menu):
 
             return sound_switch
 
-        group_var = tb.StringVar()
+        self.sound_var = tb.StringVar()
         for name in SOUND_LIST:
             sound_menu.add_radiobutton(
                 label=name,
                 value=name,
-                variable=group_var,
+                variable=self.sound_var,
                 command=sound_switch_closure(name),
             )
 
         self.add_cascade(label="Sound", menu=sound_menu)
-        group_var.set(SETTINGS["DYNAMIC"]["sound"])
+        self.sound_var.set(SETTINGS["DYNAMIC"]["sound"])
 
     def _right_click_handler(self, event: tk.Event) -> None:
         self.post(event.x_root, event.y_root)
