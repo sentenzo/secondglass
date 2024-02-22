@@ -3,6 +3,7 @@ import tkinter as tk
 import ttkbootstrap as tb
 import ttkbootstrap.constants as c
 
+from secondglass.config import SETTINGS
 from secondglass.player import play_beep
 from secondglass.progress import IProgressIndicator, ProgressIndicator
 from secondglass.timer import Status
@@ -10,7 +11,7 @@ from secondglass.timer import Status
 from .context_menu import ContextMenu
 from .frame import Frame
 from .input_frame import InputFrame
-from .params import TEXT_SINCE_RANG, UI_THEME
+from .params import TEXT_SINCE_RANG
 
 
 class MainFrame(Frame):
@@ -63,7 +64,11 @@ class MainFrame(Frame):
     @staticmethod
     def get_bootstyle_from_status(status: Status) -> str:
         if status in (Status.IDLE, Status.TICKING):
-            if UI_THEME in ("cosmo", "litera", "cerculean"):
+            if SETTINGS["DYNAMIC"]["ui_theme"] in (
+                "cosmo",
+                "litera",
+                "cerculean",
+            ):
                 return c.PRIMARY
             else:
                 return c.INFO

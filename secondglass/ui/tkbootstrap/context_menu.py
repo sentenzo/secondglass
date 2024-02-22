@@ -3,17 +3,14 @@ from typing import Callable
 
 import ttkbootstrap as tb
 
+from secondglass.config import SETTINGS
+from secondglass.player import play_beep
+
 LIGHT_THEME_LIST = ["cerculean", "cosmo", "litera"]
 DARK_THEME_LIST = ["darkly", "superhero"]
 
-SOUND_LIST = {
-    "wood": "185846__lloydevans09__light-wood.wav",
-    "hit": "186401__lloydevans09__balsa-hit-1.wav",
-    "spin": "186993__lloydevans09__wood-spin.wav",
-    "rattle": "332001__lloydevans09__spray_can_rattle.wav",
-    "ding": "338148__artordie__ding.wav",
-    "metalic": "464420__michael_grinnell__metalic_ching_keys_2.wav",
-}
+SOUND_LIST = list(SETTINGS["AUDIOFILES"])
+# ["wood", "hit", "spin", "rattle", "ding", "metalic"]
 
 
 class ContextMenu(tb.Menu):
@@ -28,29 +25,44 @@ class ContextMenu(tb.Menu):
         def theme_switch_closure(theme_name: str) -> Callable[[], None]:
             def theme_switch() -> None:
                 tb.Style().theme_use(theme_name)
+                SETTINGS["DYNAMIC"]["ui_theme"] = theme_name
 
             return theme_switch
 
-        for theme in LIGHT_THEME_LIST:
-            theme_menu.add_radiobutton(
-                label=theme, command=theme_switch_closure(theme)
-            )
-        theme_menu.add_separator()
-        for theme in DARK_THEME_LIST:
-            theme_menu.add_radiobutton(
-                label=theme, command=theme_switch_closure(theme)
-            )
+        group_var = tb.StringVar(value=SETTINGS["DYNAMIC"]["ui_theme"])
+        for theme in LIGHT_THEME_LIST + ["|"] + DARK_THEME_LIST:
+            if theme == "|":
+                theme_menu.add_separator()
+            else:
+                theme_menu.add_radiobutton(
+                    label=theme,
+                    value=theme,
+                    command=theme_switch_closure(theme),
+                    variable=group_var,
+                )
         self.add_cascade(label="Theme", menu=theme_menu)
 
     def create_sound_menu(self) -> None:
         sound_menu = tb.Menu(self, tearoff=0)
-        sound_menu.add_radiobutton(label="wood")
-        sound_menu.add_radiobutton(label="hit")
-        sound_menu.add_radiobutton(label="spin")
-        sound_menu.add_radiobutton(label="rattle")
-        sound_menu.add_radiobutton(label="ding")
-        sound_menu.add_radiobutton(label="metalic")
+
+        def sound_switch_closure(sound_name: str) -> Callable[[], None]:
+            def sound_switch() -> None:
+                SETTINGS["DYNAMIC"]["sound"] = sound_name
+                play_beep(sound_name)
+
+            return sound_switch
+
+        group_var = tb.StringVar()
+        for name in SOUND_LIST:
+            sound_menu.add_radiobutton(
+                label=name,
+                value=name,
+                variable=group_var,
+                command=sound_switch_closure(name),
+            )
+
         self.add_cascade(label="Sound", menu=sound_menu)
+        group_var.set(SETTINGS["DYNAMIC"]["sound"])
 
     def _right_click_handler(self, event: tk.Event) -> None:
         self.post(event.x_root, event.y_root)

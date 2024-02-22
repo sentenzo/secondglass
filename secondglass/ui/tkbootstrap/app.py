@@ -5,7 +5,7 @@ from secondglass.helpers import pyinstaller_fix_path
 
 from ..ui import UI
 from .main_frame import MainFrame
-from .params import UI_THEME, WINDOW_INIT_SIZE, WINDOW_MIN_SIZE
+from .params import WINDOW_INIT_SIZE, WINDOW_MIN_SIZE
 
 
 class AppWindow(tb.Window):
@@ -13,7 +13,7 @@ class AppWindow(tb.Window):
         icon_path = pyinstaller_fix_path("resources/icons/clock_24.png")
         super().__init__(
             title="SecondGlass",
-            themename=UI_THEME,
+            themename=SETTINGS["DYNAMIC"]["ui_theme"],
             minsize=WINDOW_MIN_SIZE,
             size=WINDOW_INIT_SIZE,
             iconphoto=icon_path,
@@ -28,6 +28,7 @@ class AppWindow(tb.Window):
             SETTINGS["DYNAMIC"][
                 "init_text_input"
             ] = main_frame.params.text_input.get()
+            SETTINGS["DYNAMIC"]["ui_theme"] = tb.Style().theme.name
             save_settings(SETTINGS)
             self.destroy()
 

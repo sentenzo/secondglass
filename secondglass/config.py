@@ -3,18 +3,30 @@ from configparser import ConfigParser
 from typing import Any, Mapping
 
 APP_NAME = "secondglass"
+VERSION = 1
 
-default_settings: Mapping[str, Mapping[str, Any]] = {
-    "STATIC": {
+DEFAULT_SETTINGS: Mapping[str, Mapping[str, Any]] = {
+    "CONFIG_VERSION": {
+        "config_version": VERSION,
+    },
+    "STATIC": {  # can't be changed from UI
         "font_init_size": 18,
         "font_family": "Calibri Light",
         "render_delay_ms": 30,
         "wh_ratio_threshold": 2.6,
     },
-    "DYNAMIC": {
+    "DYNAMIC": {  # can be changed from UI
         "init_text_input": "5 minutes",
         "sound": "hit",
         "ui_theme": "darkly",  # litera cosmo cerculean /  superhero darkly
+    },
+    "AUDIOFILES": {
+        "wood": "185846__lloydevans09__light-wood.wav",
+        "hit": "186401__lloydevans09__balsa-hit-1.wav",
+        "spin": "186993__lloydevans09__wood-spin.wav",
+        "rattle": "332001__lloydevans09__spray_can_rattle.wav",
+        "ding": "338148__artordie__ding.wav",
+        "metalic": "464420__michael_grinnell__metalic_ching_keys_2.wav",
     },
 }
 CONF_DIR_NAME = APP_NAME
@@ -41,6 +53,25 @@ def _get_conf_path() -> str:
     return config_path
 
 
+def _update_config_version(config: ConfigParser, path: str) -> ConfigParser:
+    if (
+        config.getint("CONFIG_VERSION", "config_version", fallback=0)
+        == VERSION
+    ):
+        return config
+    new_config = ConfigParser()
+    new_config.read_dict(DEFAULT_SETTINGS)
+    for section in config:
+        if section not in new_config:
+            continue
+        for name in config[section]:
+            if name not in new_config[section]:
+                continue
+            new_config[section][name] = config[section][name]
+    save_settings(new_config)
+    return new_config
+
+
 CONFIG_PATH = _get_conf_path()
 
 
@@ -52,10 +83,13 @@ def save_settings(config: ConfigParser) -> None:
 def _get_config() -> ConfigParser:
     config = ConfigParser()
     if not os.path.exists(CONFIG_PATH):
-        config.read_dict(default_settings)
+        config.read_dict(DEFAULT_SETTINGS)
         save_settings(config)
     config.read(CONFIG_PATH)
-    return config
+
+    return _update_config_version(config, CONFIG_PATH)
 
 
 SETTINGS = _get_config()
+
+__all__ = ["SETTINGS", "save_settings"]

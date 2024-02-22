@@ -5,7 +5,6 @@ import ttkbootstrap as tb
 from secondglass.config import SETTINGS
 from secondglass.timer import Timer
 
-UI_THEME = SETTINGS.get("STATIC", "ui_theme")
 FONT_INIT_SIZE = SETTINGS.getint("STATIC", "font_init_size")
 FONT_FAMILY = SETTINGS.get("STATIC", "font_family")
 RENDER_DELAY_MS = SETTINGS.getint("STATIC", "render_delay_ms")
