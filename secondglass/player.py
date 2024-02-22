@@ -14,9 +14,16 @@ def get_beep_file_path(sound_name: str | None = None) -> str:
     return pyinstaller_fix_path("resources/sounds/" + file_name)
 
 
+_source = pyglet.media.load(get_beep_file_path())
+
+
 def play_beep(sound_name: str | None = None) -> None:
-    source = pyglet.media.load(get_beep_file_path(sound_name))
-    source.play()
+    global _source
+    if sound_name:
+        pyglet.media.load(get_beep_file_path(sound_name)).play()
+    else:
+        _source.play()
+        _source = pyglet.media.load(get_beep_file_path())
 
 
 """
