@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter.font import Font
 
 import ttkbootstrap as tb
 import ttkbootstrap.constants as c
@@ -8,13 +7,7 @@ from secondglass.timer.timer import Status
 
 from .btn_frame import BtnFrame
 from .frame import Frame
-from .params import (
-    FONT_FAMILY,
-    FONT_INIT_SIZE,
-    PADDING,
-    TEXT_SINCE_RANG,
-    Params,
-)
+from .params import FONT_INIT_SIZE, PADDING, TEXT_SINCE_RANG, Params
 
 
 class InputFrame(Frame):
@@ -22,7 +15,6 @@ class InputFrame(Frame):
         super().__init__(master, params)
 
     def create_all(self) -> None:
-        self.font = Font(family=FONT_FAMILY, size=FONT_INIT_SIZE)
         self.inner_container = tb.Frame(self)
         self.upper_placeholder = tb.Label(
             self.inner_container, bootstyle=c.SECONDARY
@@ -31,12 +23,12 @@ class InputFrame(Frame):
             self.inner_container,
             textvariable=self.params.text_input,
             justify=c.CENTER,
-            font=self.font,
+            font=self.params.font_h1,
             cursor="xterm",
         )
         self.btn_container = BtnFrame(self.inner_container, self.params)
         self.btn_container.create_all()
-        self.upper_placeholder.configure(font=self.btn_container.font)
+        self.upper_placeholder.configure(font=self.params.font_h2)
 
     def pack_all(self) -> None:
         self.pack(
@@ -73,7 +65,7 @@ class InputFrame(Frame):
             )
 
             new_font_size = int(FONT_INIT_SIZE * new_size)
-            self.font.config(size=new_font_size)
+            self.params.font_h1.config(size=new_font_size)
             self.params.text_input.set(self.params.text_input.get())
             # - fixes the font alignment issue
 

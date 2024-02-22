@@ -26,6 +26,7 @@ class ContextMenu(tb.Menu):
             def theme_switch() -> None:
                 tb.Style().theme_use(theme_name)
                 SETTINGS["DYNAMIC"]["ui_theme"] = theme_name
+                self.master.input_frame.btn_container.rebind_font()  # 😑
 
             return theme_switch
 

@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter.font import Font
 from typing import Callable
 
 import ttkbootstrap as tb
@@ -11,10 +10,8 @@ from .frame import Frame
 from .params import (
     BTN_FONT_PROPORTION,
     BTN_PADDING_PROPORTION,
-    FONT_FAMILY,
     FONT_INIT_SIZE,
     PADDING,
-    UI_THEME,
     Params,
 )
 
@@ -23,12 +20,13 @@ class BtnFrame(Frame):
     def __init__(self, master: tk.Misc, params: Params) -> None:
         super().__init__(master, params)
 
+    def rebind_font(self) -> None:
+        tb.Style().configure("My.Link.TButton", font=self.params.font_h2)
+
     def create_all(self) -> None:
         self.padding = int(PADDING * BTN_PADDING_PROPORTION)
-        self.font = Font(
-            family=FONT_FAMILY, size=int(FONT_INIT_SIZE * BTN_FONT_PROPORTION)
-        )
-        tb.Style(UI_THEME).configure("My.Link.TButton", font=self.font)
+
+        self.rebind_font()
 
         def create_btn(text: str) -> tb.Button:
             return tb.Button(
@@ -106,7 +104,7 @@ class BtnFrame(Frame):
             new_font_size = int(
                 FONT_INIT_SIZE * BTN_FONT_PROPORTION * new_size
             )
-            self.font.config(size=new_font_size)
+            self.params.font_h2.config(size=new_font_size)
 
             self.padding = int(PADDING * BTN_PADDING_PROPORTION * new_size)
             for btn in self.btns_ordered:

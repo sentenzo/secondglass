@@ -28,7 +28,7 @@ class AppWindow(tb.Window):
             SETTINGS["DYNAMIC"][
                 "init_text_input"
             ] = main_frame.params.text_input.get()
-            SETTINGS["DYNAMIC"]["ui_theme"] = tb.Style().theme.name
+            SETTINGS["DYNAMIC"]["ui_theme"] = self.style.theme.name
             save_settings(SETTINGS)
             self.destroy()
 

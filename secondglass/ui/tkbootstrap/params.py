@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from tkinter.font import Font
 
 import ttkbootstrap as tb
 
@@ -32,6 +33,15 @@ class Params:
     text_output: tb.StringVar = field(default_factory=lambda: tb.StringVar())
     text_message: tb.StringVar = field(default_factory=lambda: tb.StringVar())
     size: tb.DoubleVar = field(default_factory=lambda: tb.DoubleVar(value=1.0))
+
+    font_h1: Font = field(
+        default_factory=lambda: Font(family=FONT_FAMILY, size=FONT_INIT_SIZE)
+    )
+    font_h2: Font = field(
+        default_factory=lambda: Font(
+            family=FONT_FAMILY, size=int(FONT_INIT_SIZE * BTN_FONT_PROPORTION)
+        )
+    )
 
     @staticmethod
     def _calc_size(width: int, height: int) -> float:
