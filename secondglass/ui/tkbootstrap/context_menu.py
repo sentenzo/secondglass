@@ -49,7 +49,9 @@ class ContextMenu(tb.Menu):
         def sound_switch_closure(sound_name: str) -> Callable[[], None]:
             def sound_switch() -> None:
                 SETTINGS["DYNAMIC"]["sound"] = sound_name
-                play_beep(sound_name)
+                play_beep(update=True)
+                # `play_beep(update=True)` must be called at least once
+                #   to update the `_sound` variable
 
             return sound_switch
 
