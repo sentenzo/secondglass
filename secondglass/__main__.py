@@ -1,5 +1,6 @@
-from secondglass.ui import ConsoleUI, TkbUI  # noqa: F401
+from secondglass.ui import ConsoleUI, KivyUI, TkbUI  # noqa: F401
 
 if __name__ == "__main__":
-    TkbUI().run()
+    # TkbUI().run()
     # ConsoleUI().run()
+    KivyUI().run()
