@@ -1,6 +1,6 @@
 
 
-<h1>secondglass</h1>
+<h1>SecondGlass</h1>
 
 A portable timer-application: simple yet efficient time management tool.
 
@@ -16,7 +16,7 @@ It was **hugely** inspired by [@dziemborowicz](https://github.com/dziemborowicz)
 <h2>Table of Contents</h2>
 
 - [Goals](#goals)
-  - [What is Hourglass? click to (un)fold](#what-is-hourglass-click-to-unfold)
+  - [What is Hourglass?](#what-is-hourglass)
   - [What's wrong with Hourglass?](#whats-wrong-with-hourglass)
 - [Features](#features)
 - [How to use](#how-to-use)
@@ -31,13 +31,13 @@ It was **hugely** inspired by [@dziemborowicz](https://github.com/dziemborowicz)
 
 ## Goals
 **Why did I make it**:
-- to get familiar with Python GUI toolkits (with `tkinter` in particular) to be able to use it in my other projects
+- to get familiar with Python GUI toolkits (with `tkinter` in particular) to be able to utilize this skills in my other projects
 - to make a proper substitution for [Hourglass](https://github.com/dziemborowicz/hourglass)
 
 <details>
   <summary> <strong>What is Hourglass?</strong> Click to (un)fold.</summary>
 
-### What is Hourglass? click to (un)fold
+### What is Hourglass?
 
 It's a countdown timer desctop GUI application for Windows;
 written on C#; minimalistic in a Unix-way-ish sence.
@@ -51,7 +51,7 @@ It looks like this:
 </div>
 
 ### What's wrong with Hourglass?
-Nothing's wrong with it. It's an ammazing app. I've being using it for 3+ years.
+Nothing's wrong with it. It's an amazing app. I've being using it for 3+ years.
 
 Though, in my humble opinion, it maybe needs some slight optimization. Its downsides are:
 - unreasonably high memory consumption: **70-180 MB**, depending on the size of the window I guess
@@ -65,19 +65,14 @@ Though, in my humble opinion, it maybe needs some slight optimization. Its downs
 
 - a single-file portable app
 - resizable window with adaptive UI
-- you type the time duration in a textbox and press the `start`-button (or just <kbd>Enter</kbd>)
-  - input examples:
-    - `10` becomes: **10 minutes**
-    - `123` or `123 m` or `123min` becomes: **2 hours 3 minutes**
-    - `30s` or `30 s` or `30 sec` becomes: **30 seconds**
-    - `1h 35m` becomes: **1 hour 35 minutes**
-  - the last valid input is saved between sessions
-- you can **pause**, **restart** or **abort** the timer by pressing `pause`, `restart` and `stop` buttons respectively
+- right button click opens a context menu, where you can:
+  - change UI theme
+  - change the ring sound
+- the application state is saved between sessions (last valid input, UI theme, the dinging sound picked)
 - when the timer expires:
   - the short dinging sound is played
   - the timer window pops up above all the over windows
 - the progress bar is also displayed on a taskbar plate, so it's visible even when the app is minimized
-- requires ≈ 20MB of RAM
 
 ## How to use
 
@@ -85,6 +80,12 @@ Windows 10 is required.
 
 1. Download the executable named `secondglass.exe`, from the [latest release](https://github.com/sentenzo/secondglass/releases/latest)
 2. Run the executable
+3. Type the time duration in a textbox and press the `start`-button (or just <kbd>Enter</kbd>). Input examples:
+    - `10` becomes: **10 minutes**
+    - `123` or `123 m` or `123min` becomes: **2 hours 3 minutes**
+    - `30s` or `30 s` or `30 sec` becomes: **30 seconds**
+    - `1h 35m` becomes: **1 hour 35 minutes**
+4. You can **pause**, **restart** or **abort** the timer by pressing `pause`, `restart` and `stop` buttons respectively
 
 ## What's inside
 
@@ -92,8 +93,8 @@ Windows 10 is required.
 - `secondglass.timer` — the core-logics of the app (ui-agnostic)
 - `secondglass.ui.console` — visualization in command line
 - `secondglass.ui.tkbootstrap` — `tkinter`-powered UI
-  - [see more on the event-model I use](secondglass/ui/README.md)
-  - [see more on the window structure](secondglass/ui/tkbootstrap/README.md)
+  - [learn more on the event-model I use](secondglass/ui/README.md)
+  - [learn more on the window structure](secondglass/ui/tkbootstrap/README.md)
 - `secondglass.progress` — working with Windows toolbar indicator
 
 ### Third party modules
