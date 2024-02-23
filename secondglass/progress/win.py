@@ -30,7 +30,7 @@ class TaskbarProgressIndicatorWin(IProgressIndicator):
             interface=ITaskbarList3,
         )
         self.taskbar.HrInit()
-        self.taskbar.ActivateTab(self.window_handler)
+        # self.taskbar.ActivateTab(self.window_handler)
         self.set_value(0.0)
         self.set_state_noprogress()
 
