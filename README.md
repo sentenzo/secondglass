@@ -100,7 +100,7 @@ Windows 10 is required.
 ### Third party modules
 - `tkbootstrap` — gives `tkinter` some attractive appearance
 - `comtypes` — grants access to Windows API (to change window toolbar)
-- `pyglet` — plays that dinging sound when the timer rings
+- `pygame` — plays that dinging sound when the timer rings
 - `pyinstaller` — packs everything together into a single executable
 
 ## How to build
