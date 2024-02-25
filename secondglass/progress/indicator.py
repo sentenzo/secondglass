@@ -23,7 +23,7 @@ class IProgressIndicator:
 
 class Dummy(IProgressIndicator):
     def set_value(self, val: float) -> None:
-        raise NotImplementedError
+        pass
 
     def set_state_noprogress(self) -> None:
         pass
