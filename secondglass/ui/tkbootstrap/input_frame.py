@@ -76,12 +76,15 @@ class InputFrame(Frame):
         self.params.size.trace_add("write", on_size_change)
         self.btn_container.set_callbacks()
 
+        def entry_select_all(event: tk.Event) -> None:
+            self.entry.select_range(0, c.END)
+            self.entry.icursor(c.END)
+
         def entry_focus_in(event: tk.Event) -> None:
             if self.params.timer.status == Status.RANG:
                 self.upper_placeholder.configure(text="")
             self.entry.configure(textvariable=self.params.text_input)
-            self.entry.select_range(0, c.END)
-            self.entry.icursor(c.END)
+            entry_select_all(event)
 
         def entry_focus_out(event: tk.Event) -> None:
             if self.params.timer.status == Status.RANG:
@@ -91,6 +94,7 @@ class InputFrame(Frame):
 
         self.entry.bind("<FocusIn>", entry_focus_in)
         self.entry.bind("<FocusOut>", entry_focus_out)
+        self.entry.bind("<Control-a>", entry_select_all)
 
         def return_pressed(event: tk.Event) -> None:
             for btn in [
