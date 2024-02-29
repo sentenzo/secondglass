@@ -3,7 +3,7 @@ from configparser import ConfigParser
 from typing import Any, Mapping
 
 APP_NAME = "secondglass"
-VERSION = 1
+VERSION = 2
 
 DEFAULT_SETTINGS: Mapping[str, Mapping[str, Any]] = {
     "CONFIG_VERSION": {
@@ -19,6 +19,7 @@ DEFAULT_SETTINGS: Mapping[str, Mapping[str, Any]] = {
         "init_text_input": "5 minutes",
         "sound": "hit",
         "ui_theme": "darkly",  # litera cosmo cerculean /  superhero darkly
+        "prevent_screensaver": False,
     },
     "AUDIOFILES": {
         "wood": "185846__lloydevans09__light-wood.wav",

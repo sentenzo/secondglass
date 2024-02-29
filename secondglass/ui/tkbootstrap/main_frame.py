@@ -6,6 +6,7 @@ import ttkbootstrap.constants as c
 from secondglass.config import SETTINGS
 from secondglass.player import play_beep
 from secondglass.progress import IProgressIndicator, ProgressIndicator
+from secondglass.screensaver import SCREENSAVER_PREVENTER
 from secondglass.timer import Status
 
 from .context_menu import ContextMenu
@@ -97,6 +98,7 @@ class MainFrame(Frame):
             self.input_frame.upper_placeholder.configure(text=TEXT_SINCE_RANG)
             self.progress_indicator.set_state_error()
             self.input_frame.btn_container._update_btns_visibility()
+            SCREENSAVER_PREVENTER.wake_up()
             self._put_app_on_top()
             play_beep()
         self.change_bootstyle(
